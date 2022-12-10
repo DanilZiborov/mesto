@@ -1,0 +1,8 @@
+/* Нормализация стилей */
+
+@import url(../vendor/normalize.css);
+
+
+/* Шрифты */
+
+@import url(../fonts/font.css);
