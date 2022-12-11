@@ -6,7 +6,7 @@
 
 .header {
     border-bottom: 1px solid #545454;
-    margin-bottom: 38px;
+    margin-bottom: 42px;
 }
 
 
@@ -16,4 +16,68 @@
     margin: 28px 0 32px 27px;
     background-image: url(images/header__logo.svg);
     background-repeat: no-repeat;
+}
+
+.profile {
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 0 19px;
+    margin-bottom: 36px;
+}
+
+
+
+.profile__avatar {
+    display: block;
+    margin: 0 auto 25px;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+}
+
+.profile__info {
+    margin: 0 0 32px 0;
+    position: relative;
+}
+
+.profile__name {
+    margin: 0 0 8px 0;
+    font-size: 27px;
+    line-height: 1.22;
+    font-weight: 500;
+    text-align: center;
+}
+
+.profile__job {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.214;
+    text-align: center;
+
+
+}
+
+.profile__edit-button {
+    width: 18px;
+    height: 18px;
+    position: absolute;
+    top: 8px;
+    right: 19px;
+    background-color: transparent;
+    background-image: url(images/profile__edit-button.svg);
+    padding: 0;
+    border: 0;
+    cursor: pointer;
+}
+
+.profile__add-button {
+    height: 50px;
+    padding: 0;
+    border: 1px solid #fff;
+    background-color: transparent;
+    background-image: url(images/profile__add-button.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
 }
