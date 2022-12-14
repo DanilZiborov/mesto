@@ -1,7 +1,9 @@
 .root {
     font-family: Inter, Arial, sans-serif;
     background-color: #000;
+    /* width: 320px; */
 }
+
 
 .header {
     box-sizing: border-box;
@@ -133,9 +135,10 @@
     background-color: transparent;
     background-image: url(images/card__like-button.svg);
     border: 0;
-
     padding: 0;
+    cursor: pointer;
 }
+
 
 .card__title-wrapper {
     padding: 0 20px 25px 21px;
@@ -155,12 +158,11 @@
     color: #545454;
 }
 
-@media (min-width: 768px) {
+
+/* @media (min-width: 768px) {
 
     .page {
-        max-width: 1280px;
-        padding: 0 200px 0;
-        margin: 0 auto;
+        padding: 0 40px 0;
     }
 
     .header {
@@ -225,5 +227,85 @@
         line-height: 1.22;
         color: #545454;
     }
+
+}
+
+@media (min-width: 1280px) {
+    .page {
+        max-width: 1280px;
+        padding: 0 200px 0;
+        margin: 0 auto;
+    }
+} */
+
+.popup {
+    display: flex;
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, .6)
+}
+
+.popup__container {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 282px;
+    height: 322px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.15);
+}
+
+.popup__title {
+    margin: 25px 22px 75px;
+    font-size: 18px;
+    line-height: 1.22;
+    font-weight: 900;
+
+}
+
+.popup__input {
+    box-sizing: border-box;
+    padding: 0 0 3px 0;
+    display: block;
+    width: 238px;
+    height: 27px;
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, .2);
+    font-size: 14px;
+    line-height: 1.21;
+}
+
+.popup__input:focus {
+    outline: none;
+}
+
+.popup__input_type_name {
+    margin: 0 22px 27px
+}
+
+.popup__input_type_job {
+    margin: 0 22px 49px
+}
+
+
+.popup__submit-button {
+    width: 238px;
+    height: 46px;
+    display: block;
+    margin: 0 22px 25px;
+    padding: 0;
+    width: 238px;
+    height: 46px;
+    background-color: #000;
+    font-size: 14px;
+    line-height: 1.21;
+    color: #fff;
+    border-radius: 2px;
+    cursor: pointer;
 
 }
