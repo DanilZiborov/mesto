@@ -160,7 +160,6 @@
 
 .popup {
     display: none;
-    /* display: flex; */
     position: fixed;
     left: 0;
     top: 0;
@@ -168,6 +167,11 @@
     bottom: 0;
     background-color: rgba(0, 0, 0, .6)
 }
+
+.popup_opened {
+    display: flex;
+}
+
 
 .popup__container {
     box-sizing: border-box;
