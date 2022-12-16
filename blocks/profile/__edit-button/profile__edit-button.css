@@ -9,6 +9,10 @@
     cursor: pointer;
 }
 
+.profile__edit-button:hover {
+  opacity: 60%;
+}
+
 @media (min-width: 768px) {
 
     .profile__edit-button {
