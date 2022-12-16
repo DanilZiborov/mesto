@@ -4,7 +4,7 @@
     margin: 0 0 32px 27px;
     background-image: url(../../../images/header__logo.svg  );
     background-repeat: no-repeat;
-    background-size: cover
+    background-size: cover;
 }
 
 @media (min-width: 768px) {
