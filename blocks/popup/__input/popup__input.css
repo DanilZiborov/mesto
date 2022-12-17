@@ -1,22 +1,21 @@
 .popup__input {
-    box-sizing: border-box;
-    padding: 0 0 3px 0;
-    display: block;
-    width: 238px;
-    height: 27px;
-    border: none;
-    border-bottom: 1px solid rgba(0, 0, 0, .2);
-    font-size: 14px;
-    line-height: 1.21;
+  box-sizing: border-box;
+  padding: 0 0 10px 0;
+  display: block;
+  width: 238px;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, .2);
+  font-size: 14px;
+  line-height: 1.21;
 }
 
 .popup__input:focus {
-    outline: none;
+  outline: none;
 }
 
 @media (min-width: 768px) {
 
-    .popup__input {
-        width: 358px;
-    }
+  .popup__input {
+    width: 358px;
+  }
 }

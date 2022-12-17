@@ -1,3 +1,11 @@
 .popup__input_type_job {
-    margin-bottom: 49px;
+  margin-bottom: 45px;
 }
+
+@media (min-width: 768px) {
+
+  .popup__input_type_job {
+    margin-bottom: 48px;
+  }
+}
+

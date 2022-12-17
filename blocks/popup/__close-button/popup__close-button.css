@@ -18,6 +18,7 @@
 }
 
 @media (min-width: 768px) {
+
   .popup__close-button {
     right: -40px;
     top: -40px;
