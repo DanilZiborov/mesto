@@ -75,13 +75,13 @@
     </footer>
     <div class="popup">
       <div class="popup__container">
-        <p class="popup__title">Редактировать профиль</p>
-        <form action="#" name="edit-profile-form">
-          <input type="text" name="name" class="popup__input popup__input_type_name">
-          <input type="text" name="job" class="popup__input popup__input_type_job">
+        <h2 class="popup__title">Редактировать профиль</h2>
+        <form class="form" action="#" name="edit-profile-form">
+          <input type="text" name="name" class="popup__input popup__input_type_name" required>
+          <input type="text" name="job" class="popup__input popup__input_type_job" required>
           <button type="submit" class="popup__submit-button">Сохранить</button>
-      </form>
-      <button type="button" class="popup__close-button"></button>
+        </form>
+        <button type="button" class="popup__close-button"></button>
       </div>
     </div>
   </div>

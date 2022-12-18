@@ -3,7 +3,6 @@
 }
 
 @media (min-width: 768px) {
-
   .profile__info {
     flex-grow: 1;
     margin: 0;

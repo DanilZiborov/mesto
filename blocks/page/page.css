@@ -1,16 +1,7 @@
 @media (min-width: 768px) {
   .page {
     max-width: 880px;
-    /* Решил сделать тут отступ, чтобы header и profile не прилипали между 768 и 1280 */
     padding: 0 50px 0;
     margin: 0 auto;
   }
-}
-
-@media (min-width: 1280px) {
-
-  .page {
-    padding: 0 200px 0;
-  }
-
 }
