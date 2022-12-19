@@ -13,16 +13,17 @@ function openPopup() {
   popup.classList.add('popup_opened');
 }
 
+function closePopup() {
+  popup.classList.remove('popup_opened');
+}
+
 function saveChanges(evt) {
   evt.preventDefault();
   profileName.textContent = nameInput.value;
   profileJob.textContent = jobInput.value;
-  popup.classList.remove('popup_opened');
+  closePopup();
 }
 
-function closePopup() {
-  popup.classList.remove('popup_opened');
-}
 
 editButton.addEventListener('click', openPopup);
 popupForm.addEventListener('submit', saveChanges);
