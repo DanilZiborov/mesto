@@ -28,13 +28,21 @@ const initialCards = [
   },
 ];
 
-//Элементы попапа редкатирования личных данных
+//Общие элементы для трех попапов
 
 const popup = document.querySelector('.popup');
-const popupForm = popup.querySelector('.form')
-const nameInput = popup.querySelector('.popup__input_type_name');
-const jobInput = popup.querySelector('.popup__input_type_job');
-const closeButton = popup.querySelector('.popup__close-button')
+const closeButton = popup.querySelector('.popup__close-button');
+
+//Элементы попапа редкатирования личных данных
+
+
+const popupTypeEdit = document.querySelector('.popup_type_edit');
+const popupEditForm = popupTypeEdit.querySelector('.form_type_edit')
+const nameInput = popupTypeEdit.querySelector('.popup__input_type_name');
+const jobInput = popupTypeEdit.querySelector('.popup__input_type_job');
+
+// Элементы профиля
+
 const editButton = document.querySelector('.profile__edit-button');
 const profileName = document.querySelector('.profile__name');
 const profileJob = document.querySelector('.profile__job');
@@ -45,25 +53,37 @@ const cardsSection = document.querySelector('.cards');
 const cardTemplate = document.querySelector('#card').content;
 
 
-//Логика открытия попапа редактирования личных данных
+//Общие функции закрытия и открытия для трех попапов
 
-
-function openPopup() {
-  nameInput.value = profileName.textContent;
-  jobInput.value = profileJob.textContent;
+function openPopup(popup) {
   popup.classList.add('popup_opened');
 }
 
-function closePopup() {
-  popup.classList.remove('popup_opened');
+function closePopup(evt, popup) {
+  evt ? evt.currentTarget.parentElement.parentElement.classList.remove('popup_opened') : popup.classList.remove('popup_opened');
 }
 
-function saveChanges(evt) {
+//Функции показа и сохранения изменений попапа редактирования
+
+function showEditPopup() {
+  nameInput.value = profileName.textContent;
+  jobInput.value = profileJob.textContent;
+  openPopup(popupTypeEdit);
+}
+
+
+function saveProfileChanges(evt) {
   evt.preventDefault();
   profileName.textContent = nameInput.value;
   profileJob.textContent = jobInput.value;
-  closePopup();
+  closePopup(undefined, popupTypeEdit);
 }
+
+
+//Функции показа и сохранения изменений попапа добавления карточек
+
+// тут будет код
+
 
 
 // Логика добавления дефолтных карточек
@@ -77,13 +97,17 @@ function showInitialCards() {
   });
 };
 
+
+
 // Слушатели событий
 
-editButton.addEventListener('click', openPopup);
-popupForm.addEventListener('submit', saveChanges);
+editButton.addEventListener('click', showEditPopup);
+popupEditForm.addEventListener('submit', saveProfileChanges);
 closeButton.addEventListener('click', closePopup);
 
-// Генерим дефолтные карточки
+
+
+// Генерим дефолтные карточки при открытии страницы
 
 showInitialCards();
 
