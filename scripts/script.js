@@ -31,7 +31,7 @@ const initialCards = [
 //Общие элементы для трех попапов
 
 const popup = document.querySelector('.popup');
-const closeButton = popup.querySelector('.popup__close-button');
+const closeButtons = document.querySelectorAll('.popup__close-button');
 
 //Элементы попапа редкатирования личных данных
 
@@ -58,6 +58,7 @@ const profileJob = document.querySelector('.profile__job');
 
 const cardsSection = document.querySelector('.cards');
 const cardTemplate = document.querySelector('#card').content;
+let cardElement = cardTemplate.querySelector('.card').cloneNode(true);
 
 
 //Общие функции закрытия и открытия для трех попапов
@@ -86,17 +87,22 @@ function saveProfileChanges(evt) {
   closePopup(undefined, popupTypeEdit);
 }
 
-//Функция показа попапа редактирования
+
+
+//Функции показа и сохранения изменений попапа добавления карточек
 
 function showAddPopup() {
   openPopup(popupTypeAdd);
 }
 
-
-
-//Функции показа и сохранения изменений попапа добавления карточек
-
-// тут будет код
+function addNewCard(evt) {
+  evt.preventDefault();
+  cardElement = cardTemplate.querySelector('.card').cloneNode(true);
+  cardElement.querySelector('.card__title').textContent = placeTitleInput.value;
+  cardElement.querySelector('.card__image').src = placeLinkInput.value;
+  cardsSection.append(cardElement);
+  closePopup(undefined, popupTypeAdd);
+};
 
 
 
@@ -104,7 +110,7 @@ function showAddPopup() {
 
 function showInitialCards() {
   initialCards.forEach(item => {
-    const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
+    cardElement = cardTemplate.querySelector('.card').cloneNode(true);
     cardElement.querySelector('.card__title').textContent = item.name;
     cardElement.querySelector('.card__image').src = item.link;
     cardsSection.append(cardElement);
@@ -118,7 +124,10 @@ function showInitialCards() {
 editButton.addEventListener('click', showEditPopup);
 addButton.addEventListener('click', showAddPopup);
 popupEditForm.addEventListener('submit', saveProfileChanges);
-closeButton.addEventListener('click', closePopup);
+popupAddForm.addEventListener('submit', addNewCard);
+closeButtons.forEach(item => {
+  item.addEventListener('click', closePopup);
+});
 
 
 
