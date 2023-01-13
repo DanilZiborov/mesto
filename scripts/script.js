@@ -35,15 +35,22 @@ const closeButton = popup.querySelector('.popup__close-button');
 
 //Элементы попапа редкатирования личных данных
 
-
 const popupTypeEdit = document.querySelector('.popup_type_edit');
 const popupEditForm = popupTypeEdit.querySelector('.form_type_edit')
 const nameInput = popupTypeEdit.querySelector('.popup__input_type_name');
 const jobInput = popupTypeEdit.querySelector('.popup__input_type_job');
 
+//Элементы попапа добавления карточки
+
+const popupTypeAdd = document.querySelector('.popup_type_add');
+const popupAddForm = popupTypeAdd.querySelector('.form_type_add')
+const placeTitleInput = popupTypeAdd.querySelector('.popup__input_type_place-title');
+const placeLinkInput = popupTypeAdd.querySelector('.popup__input_type_place-link');
+
 // Элементы профиля
 
 const editButton = document.querySelector('.profile__edit-button');
+const addButton = document.querySelector('.profile__add-button');
 const profileName = document.querySelector('.profile__name');
 const profileJob = document.querySelector('.profile__job');
 
@@ -79,6 +86,13 @@ function saveProfileChanges(evt) {
   closePopup(undefined, popupTypeEdit);
 }
 
+//Функция показа попапа редактирования
+
+function showAddPopup() {
+  openPopup(popupTypeAdd);
+}
+
+
 
 //Функции показа и сохранения изменений попапа добавления карточек
 
@@ -102,12 +116,13 @@ function showInitialCards() {
 // Слушатели событий
 
 editButton.addEventListener('click', showEditPopup);
+addButton.addEventListener('click', showAddPopup);
 popupEditForm.addEventListener('submit', saveProfileChanges);
 closeButton.addEventListener('click', closePopup);
 
 
 
-// Генерим дефолтные карточки при открытии страницы
+// Показываем дефолтные карточки при открытии страницы
 
 showInitialCards();
 
