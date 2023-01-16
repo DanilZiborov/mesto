@@ -59,6 +59,8 @@ const profileJob = document.querySelector('.profile__job');
 const cardsSection = document.querySelector('.cards');
 const cardTemplate = document.querySelector('#card').content;
 let cardElement = cardTemplate.querySelector('.card').cloneNode(true);
+const cardLikeButton = cardElement.querySelector('.card__like-button');
+
 
 
 //Общие функции закрытия и открытия для трех попапов
@@ -100,9 +102,16 @@ function addNewCard(evt) {
   cardElement = cardTemplate.querySelector('.card').cloneNode(true);
   cardElement.querySelector('.card__title').textContent = placeTitleInput.value;
   cardElement.querySelector('.card__image').src = placeLinkInput.value;
-  cardsSection.append(cardElement);
+  cardElement.querySelector('.card__like-button').addEventListener('click', likeCard);
+  cardsSection.prepend(cardElement);
   closePopup(undefined, popupTypeAdd);
 };
+
+//Функция лайков карточек
+
+function likeCard(evt) {
+  evt.currentTarget.classList.toggle('card__like-button_active');
+}
 
 
 
@@ -113,6 +122,7 @@ function showInitialCards() {
     cardElement = cardTemplate.querySelector('.card').cloneNode(true);
     cardElement.querySelector('.card__title').textContent = item.name;
     cardElement.querySelector('.card__image').src = item.link;
+    cardElement.querySelector('.card__like-button').addEventListener('click', likeCard);
     cardsSection.append(cardElement);
   });
 };
@@ -128,6 +138,7 @@ popupAddForm.addEventListener('submit', addNewCard);
 closeButtons.forEach(item => {
   item.addEventListener('click', closePopup);
 });
+cardLikeButton.addEventListener('click', likeCard);
 
 
 
