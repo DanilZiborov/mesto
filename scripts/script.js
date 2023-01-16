@@ -30,7 +30,6 @@ const initialCards = [
 
 //Общие элементы для трех попапов
 
-const popup = document.querySelector('.popup');
 const closeButtons = document.querySelectorAll('.popup__close-button');
 
 //Элементы попапа редкатирования личных данных
@@ -70,7 +69,7 @@ function openPopup(popup) {
 }
 
 function closePopup(evt, popup) {
-  evt ? evt.currentTarget.parentElement.parentElement.classList.remove('popup_opened') : popup.classList.remove('popup_opened');
+  evt ? evt.currentTarget.closest('.popup').classList.remove('popup_opened') : popup.classList.remove('popup_opened');
 }
 
 //Функции показа и сохранения изменений попапа редактирования
@@ -103,6 +102,7 @@ function addNewCard(evt) {
   cardElement.querySelector('.card__title').textContent = placeTitleInput.value;
   cardElement.querySelector('.card__image').src = placeLinkInput.value;
   cardElement.querySelector('.card__like-button').addEventListener('click', likeCard);
+  cardElement.querySelector('.card__delete-button').addEventListener('click', deleteCard);
   cardsSection.prepend(cardElement);
   closePopup(undefined, popupTypeAdd);
 };
@@ -111,6 +111,12 @@ function addNewCard(evt) {
 
 function likeCard(evt) {
   evt.currentTarget.classList.toggle('card__like-button_active');
+}
+
+//Функция удаления карточки
+
+function deleteCard(evt) {
+  evt.currentTarget.closest('.card').remove();
 }
 
 
@@ -123,6 +129,7 @@ function showInitialCards() {
     cardElement.querySelector('.card__title').textContent = item.name;
     cardElement.querySelector('.card__image').src = item.link;
     cardElement.querySelector('.card__like-button').addEventListener('click', likeCard);
+    cardElement.querySelector('.card__delete-button').addEventListener('click', deleteCard);
     cardsSection.append(cardElement);
   });
 };
@@ -147,3 +154,4 @@ cardLikeButton.addEventListener('click', likeCard);
 showInitialCards();
 
 
+console.log(editButton.closest('.profile__name-wrapper'));
