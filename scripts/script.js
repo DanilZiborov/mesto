@@ -38,14 +38,14 @@ const closeButtons = document.querySelectorAll('.popup__close-button');
 //Элементы попапа редкатирования личных данных
 
 const popupTypeEdit = document.querySelector('.popup_type_edit');
-const popupEditForm = popupTypeEdit.querySelector('.form_type_edit')
+const popupEditForm = document.forms['edit'];
 const nameInput = popupTypeEdit.querySelector('.popup__input_type_name');
 const jobInput = popupTypeEdit.querySelector('.popup__input_type_job');
 
 //Элементы попапа добавления карточки
 
 const popupTypeAdd = document.querySelector('.popup_type_add');
-const popupAddForm = popupTypeAdd.querySelector('.form_type_add')
+const popupAddForm = document.forms['add'];
 const placeTitleInput = popupTypeAdd.querySelector('.popup__input_type_place-title');
 const placeLinkInput = popupTypeAdd.querySelector('.popup__input_type_place-link');
 
@@ -76,15 +76,18 @@ function openPopup(popup) {
   popup.classList.add('popup_opened');
 }
 
-function closePopup(evt, popup) {
-  evt ? evt.currentTarget.closest('.popup').classList.remove('popup_opened') : popup.classList.remove('popup_opened');
+function closePopup(popup) {
+  popup.classList.remove('popup_opened');
+}
+
+function hidePopup(evt) {
+  closePopup(evt.currentTarget.closest('.popup').classList.remove('popup_opened'));
 }
 
 //Очистить поля в попапе добавления карточки
 
-function clearPopupForm() {
-  placeTitleInput.value = '';
-  placeLinkInput.value = '';
+function clearPopupForm(evt) {
+  evt.currentTarget.reset();
 }
 
 
@@ -102,7 +105,7 @@ function saveProfileChanges(evt) {
   evt.preventDefault();
   profileName.textContent = nameInput.value;
   profileJob.textContent = jobInput.value;
-  closePopup(undefined, popupTypeEdit);
+  hidePopup(evt);
 }
 
 //Показать попап добавления карточки
@@ -113,24 +116,36 @@ function showAddPopup() {
 
 //Создать карточку
 
-function createCard(title, image) {
+function getCard(title, image) {
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
-  cardElement.querySelector('.card__title').textContent = title;
-  cardElement.querySelector('.card__image').src = image;
-  cardElement.querySelector('.card__image').addEventListener('click', showImagePopup);
-  cardElement.querySelector('.card__like-button').addEventListener('click', likeCard);
-  cardElement.querySelector('.card__delete-button').addEventListener('click', deleteCard);
+  const cardTitle = cardElement.querySelector('.card__title');
+  cardTitle.textContent = title;
+  const cardImage = cardElement.querySelector('.card__image');
+  cardImage.src = image;
+  cardImage.alt = title;
+  cardImage.addEventListener('click', showImagePopup);
+  const cardLikeButton = cardElement.querySelector('.card__like-button');
+  cardLikeButton.addEventListener('click', toggleLike);
+  const cardDeleteButton = cardElement.querySelector('.card__delete-button');
+  cardDeleteButton.addEventListener('click', deleteCard);
+  return cardElement;
+}
+
+
+function createCard(title, image) {
+  const cardElement = getCard(title, image);
   cardsSection.prepend(cardElement);
 }
+
+
 
 //Показать карточку, добавленную через попап
 
 function showNewCard(evt) {
   evt.preventDefault();
   createCard(placeTitleInput.value, placeLinkInput.value);
-  clearPopupForm();
-  closePopup(undefined, popupTypeAdd);
-
+  clearPopupForm(evt);
+  hidePopup(evt);
 };
 
 
@@ -138,13 +153,13 @@ function showNewCard(evt) {
 
 function showImagePopup(evt) {
   popupImage.src = evt.currentTarget.src;
-  popupImageCaption.textContent = evt.currentTarget.closest('.card').querySelector('.card__title').textContent;
+  popupImageCaption.textContent = evt.currentTarget.alt;
   openPopup(popupTypeImage);
 }
 
 //Лайкнуть карточку
 
-function likeCard(evt) {
+function toggleLike(evt) {
   evt.currentTarget.classList.toggle('card__like-button_active');
 }
 
@@ -168,9 +183,10 @@ editButton.addEventListener('click', showEditPopup);
 addButton.addEventListener('click', showAddPopup);
 popupEditForm.addEventListener('submit', saveProfileChanges);
 popupAddForm.addEventListener('submit', showNewCard);
-closeButtons.forEach(item => {
-  item.addEventListener('click', closePopup);
-});
+closeButtons.forEach((button) => {
+  const popup = button.closest('.popup');
+  button.addEventListener('click', () => closePopup(popup));
+})
 
 // Показываем дефолтные карточки при открытии страницы
 
