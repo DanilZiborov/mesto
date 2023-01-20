@@ -81,7 +81,7 @@ function closePopup(popup) {
 }
 
 function hidePopup(evt) {
-  closePopup(evt.currentTarget.closest('.popup').classList.remove('popup_opened'));
+  closePopup(evt.currentTarget.closest('.popup'));
 }
 
 //Очистить поля в попапе добавления карточки
@@ -123,7 +123,7 @@ function getCard(title, image) {
   const cardImage = cardElement.querySelector('.card__image');
   cardImage.src = image;
   cardImage.alt = title;
-  cardImage.addEventListener('click', showImagePopup);
+  cardImage.addEventListener('click', () => showImagePopup(title, image));
   const cardLikeButton = cardElement.querySelector('.card__like-button');
   cardLikeButton.addEventListener('click', toggleLike);
   const cardDeleteButton = cardElement.querySelector('.card__delete-button');
@@ -138,10 +138,9 @@ function createCard(title, image) {
 }
 
 
-
 //Показать карточку, добавленную через попап
 
-function showNewCard(evt) {
+function addNewCard(evt) {
   evt.preventDefault();
   createCard(placeTitleInput.value, placeLinkInput.value);
   clearPopupForm(evt);
@@ -151,9 +150,9 @@ function showNewCard(evt) {
 
 //Показать попап-картинку
 
-function showImagePopup(evt) {
-  popupImage.src = evt.currentTarget.src;
-  popupImageCaption.textContent = evt.currentTarget.alt;
+function showImagePopup(title, image) {
+  popupImage.src = image;
+  popupImageCaption.textContent = title;
   openPopup(popupTypeImage);
 }
 
@@ -182,7 +181,7 @@ function showInitialCards() {
 editButton.addEventListener('click', showEditPopup);
 addButton.addEventListener('click', showAddPopup);
 popupEditForm.addEventListener('submit', saveProfileChanges);
-popupAddForm.addEventListener('submit', showNewCard);
+popupAddForm.addEventListener('submit', addNewCard);
 closeButtons.forEach((button) => {
   const popup = button.closest('.popup');
   button.addEventListener('click', () => closePopup(popup));
