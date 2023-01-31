@@ -1,15 +1,15 @@
-.form__field {
+.popup__form-field {
   display: block;
   position: relative;
   margin-bottom: 30px;
 }
 
-.form__field:last-of-type {
+.popup__form-field:last-of-type {
   margin-bottom: 45px;
 }
 
 @media (min-width: 768px) {
-  .form__field:last-of-type {
+  .popup__form-field:last-of-type {
     margin-bottom: 48px;
   }
 }

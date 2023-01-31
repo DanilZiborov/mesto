@@ -191,66 +191,88 @@ closeButtons.forEach((button) => {
 
 //ВАЛИДАЦИЯ
 
-//Показать спан с ошибкой и добавить красную рамку
-
-function showInputError(formElement, inputElement, errorMessage) {
-  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-  inputElement.classList.add('form__input_type_error');
-  errorElement.textContent = errorMessage;
-  errorElement.classList.add('form__input-error_active');
-};
-
-
-
-
-
-
-
-
 //НИЖЕ ЧЕРНОВИКИ
 
 
+//Показываем сообщение об ошибке
 
-//Предпоследняя функция, которая навешивает слушатель инпутам из задания
+function showInputError(formElement, inputElement, { inputErrorClass, errorClass }) {
+  const errorElement = formElement.querySelector(`.${inputElement.name}-error`);
+  inputElement.classList.add(inputErrorClass);
+  errorElement.textContent = inputElement.validationMessage;
+  errorElement.classList.add(errorClass);
+};
 
-const setEventListeners = (formElement) => {
-  const inputList = Array.from(formElement.querySelectorAll('.form__input'));
-  const buttonElement = formElement.querySelector('.form__submit');
-  toggleButtonState(inputList, buttonElement);
+
+//Скрываем сообщение об ошибке
+
+function hideInputError(formElement, inputElement, { inputErrorClass, errorClass }) {
+  const errorElement = formElement.querySelector(`.${inputElement.name}-error`);
+  inputElement.classList.remove(inputErrorClass);
+  errorElement.classList.remove(errorClass);
+  errorElement.textContent = '';
+};
+
+// Проверяем инпут на валидность
+
+function checkInputValidity(formElement, inputElement, { ...rest }) {
+  if (!inputElement.validity.valid) {
+    showInputError(formElement, inputElement, rest);
+  } else {
+    hideInputError(formElement, inputElement, rest);
+  }
+};
+
+
+// Проверяем, есть ли невалидный инпут
+
+function hasInvalidInput(inputList) {
+  return inputList.some((inputElement) => {
+    return !inputElement.validity.valid;
+  });
+};
+
+// Переключаем кномпачку сабмита
+
+function toggleButtonState(inputList, buttonElement, {inactiveButtonClass, ...rest }) {
+  if (hasInvalidInput(inputList)) {
+    buttonElement.classList.add(inactiveButtonClass);
+    buttonElement.setAttribute('disabled', '');
+  }
+  else {
+    buttonElement.classList.remove(inactiveButtonClass);
+    buttonElement.removeAttribute('disabled', '');
+  }
+}
+
+
+
+// Навешиваем слушатели на каждый инпут
+
+function setEventListeners(formElement, { inputSelector, submitButtonSelector, ...rest }) {
+  const inputList = Array.from(formElement.querySelectorAll(inputSelector));
+  const buttonElement = formElement.querySelector(submitButtonSelector);
+  toggleButtonState(inputList, buttonElement, rest);
   inputList.forEach((inputElement) => {
     inputElement.addEventListener('input', function () {
-      checkInputValidity(formElement, inputElement);
-      toggleButtonState(inputList, buttonElement);
+      checkInputValidity(formElement, inputElement, rest);
+      toggleButtonState(inputList, buttonElement, rest);
     });
   });
 };
 
+//Финальная функция включения валидации
 
-//Конечная функция включения валидации из задания
-
-const enableValidation = () => {
-  const formList = Array.from(document.querySelectorAll('.form'));
+function enableValidation({ formSelector, ...rest }) {
+  const formList = Array.from(document.querySelectorAll(formSelector));
   formList.forEach((formElement) => {
-    formElement.addEventListener('submit', function (evt) {
-      evt.preventDefault();
-    });
-    const fieldsetList = Array.from(formElement.querySelectorAll('.form__set'));
-    fieldsetList.forEach((fieldSet) => {
-      setEventListeners(fieldSet);
-    });
+    setEventListeners(formElement, rest);
   });
 };
 
 
 
-
-
-
-
-
-
-
-//
+//Запускаем валидацию
 
 enableValidation({
   formSelector: '.popup__form',
@@ -260,19 +282,6 @@ enableValidation({
   inputErrorClass: 'popup__input_type_error',
   errorClass: 'popup__error_visible'
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
