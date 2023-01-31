@@ -44,9 +44,19 @@
     <div class="popup popup_type_edit">
       <div class="popup__container">
         <h2 class="popup__title">Редактировать профиль</h2>
-        <form class="form form_type_edit" action="#" name="edit">
-          <input type="text" name="name" class="popup__input popup__input_type_name" required>
-          <input type="text" name="job" class="popup__input popup__input_type_job" required>
+        <form class="form form_type_edit" action="#" name="edit" novalidate>
+          <label for="" class="form__field">
+            <input type="text" name="name" class="popup__input popup__input_type_name" required minlength="2"
+              maxlength="40">
+            <span
+              class="popup__input-error name-input-error"></span>
+          </label>
+          <label for="" class="form__field">
+            <input type="text" name="job" class="popup__input popup__input_type_job" required minlength="2"
+              maxlength="200">
+            <span
+              class="popup__input-error job-input-error"></span>
+          </label>
           <button type="submit" class="popup__submit-button">Сохранить</button>
         </form>
         <button type="button" class="popup__close-button"></button>
@@ -55,9 +65,19 @@
     <div class="popup popup_type_add">
       <div class="popup__container">
         <h2 class="popup__title">Новое место</h2>
-        <form class="form form_type_add" action="#" name="add">
-          <input type="text" name="place-title" class="popup__input popup__input_type_place-title" placeholder="Название" required>
-          <input type="text" name="place-link" class="popup__input popup__input_type_place-link" placeholder="Ссылка на кртинку" required>
+        <form class="form form_type_add" action="#" name="add" novalidate>
+          <label for="" class="form__field">
+            <input type="text" name="title" class="popup__input popup__input_type_title" placeholder="Название" required
+              minlength="2" maxlength="40">
+            <span
+              class="popup__input-error title-input-error"></span>
+          </label>
+          <label for="" class="form__field">
+            <input type="url" name="link" class="popup__input popup__input_type_link" placeholder="Ссылка на кртинку"
+              required>
+            <span
+              class="popup__input-error link-input-error"></span>
+          </label>
           <button type="submit" class="popup__submit-button">Создать</button>
         </form>
         <button type="button" class="popup__close-button"></button>
@@ -65,7 +85,8 @@
     </div>
     <div class="popup popup_type_image">
       <div class="popup__wrapper">
-        <img src="https://i.pinimg.com/originals/11/ab/14/11ab147894a7d2ce866ff88a4aa63655.jpg" alt="" class="popup__image">
+        <img src="https://i.pinimg.com/originals/11/ab/14/11ab147894a7d2ce866ff88a4aa63655.jpg" alt=""
+          class="popup__image">
         <p class="popup__image-caption"></p>
         <button class="popup__close-button"></button>
       </div>

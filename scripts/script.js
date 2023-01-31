@@ -46,8 +46,8 @@ const jobInput = popupTypeEdit.querySelector('.popup__input_type_job');
 
 const popupTypeAdd = document.querySelector('.popup_type_add');
 const popupAddForm = document.forms['add'];
-const placeTitleInput = popupTypeAdd.querySelector('.popup__input_type_place-title');
-const placeLinkInput = popupTypeAdd.querySelector('.popup__input_type_place-link');
+const placeTitleInput = popupTypeAdd.querySelector('.popup__input_type_title');
+const placeLinkInput = popupTypeAdd.querySelector('.popup__input_type_link');
 
 //Элементы попапа-картинки
 
@@ -186,6 +186,95 @@ closeButtons.forEach((button) => {
   const popup = button.closest('.popup');
   button.addEventListener('click', () => closePopup(popup));
 })
+
+
+
+//ВАЛИДАЦИЯ
+
+//Показать спан с ошибкой и добавить красную рамку
+
+function showInputError(formElement, inputElement, errorMessage) {
+  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+  inputElement.classList.add('form__input_type_error');
+  errorElement.textContent = errorMessage;
+  errorElement.classList.add('form__input-error_active');
+};
+
+
+
+
+
+
+
+
+//НИЖЕ ЧЕРНОВИКИ
+
+
+
+//Предпоследняя функция, которая навешивает слушатель инпутам из задания
+
+const setEventListeners = (formElement) => {
+  const inputList = Array.from(formElement.querySelectorAll('.form__input'));
+  const buttonElement = formElement.querySelector('.form__submit');
+  toggleButtonState(inputList, buttonElement);
+  inputList.forEach((inputElement) => {
+    inputElement.addEventListener('input', function () {
+      checkInputValidity(formElement, inputElement);
+      toggleButtonState(inputList, buttonElement);
+    });
+  });
+};
+
+
+//Конечная функция включения валидации из задания
+
+const enableValidation = () => {
+  const formList = Array.from(document.querySelectorAll('.form'));
+  formList.forEach((formElement) => {
+    formElement.addEventListener('submit', function (evt) {
+      evt.preventDefault();
+    });
+    const fieldsetList = Array.from(formElement.querySelectorAll('.form__set'));
+    fieldsetList.forEach((fieldSet) => {
+      setEventListeners(fieldSet);
+    });
+  });
+};
+
+
+
+
+
+
+
+
+
+
+//
+
+enableValidation({
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Показываем дефолтные карточки при открытии страницы
 

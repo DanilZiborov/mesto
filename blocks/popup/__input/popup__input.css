@@ -1,7 +1,6 @@
 .popup__input {
   box-sizing: border-box;
   padding: 0 0 10px 0;
-  margin-bottom: 30px;
   display: block;
   width: 238px;
   border: none;
@@ -9,10 +8,6 @@
   font-size: 14px;
   line-height: 1.21;
   transition: .5s;
-}
-
-.popup__input:last-of-type {
-  margin-bottom: 45px;
 }
 
 .popup__input:focus {
@@ -23,9 +18,5 @@
 @media (min-width: 768px) {
   .popup__input {
     width: 358px;
-  }
-
-  .popup__input:last-of-type {
-    margin-bottom: 48px;
   }
 }
