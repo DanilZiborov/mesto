@@ -31,6 +31,10 @@ const initialCards = [
 
 //Глобальные переменные
 
+//Массив всех попапов
+
+const popups = Array.from(document.querySelectorAll('.popup'));
+
 //Кнопки закрытия всех попапов
 
 const closeButtons = document.querySelectorAll('.popup__close-button');
@@ -159,13 +163,13 @@ function showImagePopup(title, image) {
 //Лайкнуть карточку
 
 function toggleLike(evt) {
-  evt.currentTarget.classList.toggle('card__like-button_active');
+  evt.target.classList.toggle('card__like-button_active');
 }
 
 //Удалить карточку
 
 function deleteCard(evt) {
-  evt.currentTarget.closest('.card').remove();
+  evt.target.closest('.card').remove();
 };
 
 //Показать карточки по умолчанию
@@ -185,14 +189,18 @@ popupAddForm.addEventListener('submit', addNewCard);
 closeButtons.forEach((button) => {
   const popup = button.closest('.popup');
   button.addEventListener('click', () => closePopup(popup));
-})
+});
+popups.forEach(popup => {
+  popup.addEventListener('click', evt => {
+    if (evt.target === evt.currentTarget) {
+      closePopup(popup);
+    };
+  });
+});
 
 
 
 //ВАЛИДАЦИЯ
-
-//НИЖЕ ЧЕРНОВИКИ
-
 
 //Показываем сообщение об ошибке
 
@@ -232,9 +240,9 @@ function hasInvalidInput(inputList) {
   });
 };
 
-// Переключаем кномпачку сабмита
+// Переключаем кнопку сабмита
 
-function toggleButtonState(inputList, buttonElement, {inactiveButtonClass, ...rest }) {
+function toggleButtonState(inputList, buttonElement, { inactiveButtonClass, ...rest }) {
   if (hasInvalidInput(inputList)) {
     buttonElement.classList.add(inactiveButtonClass);
     buttonElement.setAttribute('disabled', '');
