@@ -42,14 +42,14 @@ const closeButtons = document.querySelectorAll('.popup__close-button');
 //Элементы попапа редкатирования личных данных
 
 const popupTypeEdit = document.querySelector('.popup_type_edit');
-const popupEditForm = document.forms['edit'];
+const popupEditForm = document.forms.edit;
 const nameInput = popupTypeEdit.querySelector('.popup__input_type_name');
 const jobInput = popupTypeEdit.querySelector('.popup__input_type_job');
 
 //Элементы попапа добавления карточки
 
 const popupTypeAdd = document.querySelector('.popup_type_add');
-const popupAddForm = document.forms['add'];
+const popupAddForm = document.forms.add;
 const placeTitleInput = popupTypeAdd.querySelector('.popup__input_type_title');
 const placeLinkInput = popupTypeAdd.querySelector('.popup__input_type_link');
 
@@ -89,6 +89,15 @@ function closePopup(popup) {
 function hidePopup(evt) {
   closePopup(evt.currentTarget.closest('.popup'));
 }
+
+// Закрыть открытый попап клавишей Esc
+
+function handleEscape(evt) {
+  if (evt.key === 'Escape') {
+    const popupActive = document.querySelector('.popup_opened');
+    closePopup(popupActive);
+  };
+};
 
 //Очистить поля в попапе добавления карточки
 
@@ -199,109 +208,6 @@ popups.forEach(popup => {
     };
   });
 });
-
-
-
-//ВАЛИДАЦИЯ
-
-//Показываем сообщение об ошибке
-
-function showInputError(formElement, inputElement, { inputErrorClass, errorClass }) {
-  const errorElement = formElement.querySelector(`.${inputElement.name}-error`);
-  inputElement.classList.add(inputErrorClass);
-  errorElement.textContent = inputElement.validationMessage;
-  errorElement.classList.add(errorClass);
-};
-
-
-//Скрываем сообщение об ошибке
-
-function hideInputError(formElement, inputElement, { inputErrorClass, errorClass }) {
-  const errorElement = formElement.querySelector(`.${inputElement.name}-error`);
-  inputElement.classList.remove(inputErrorClass);
-  errorElement.classList.remove(errorClass);
-  errorElement.textContent = '';
-};
-
-// Проверяем инпут на валидность
-
-function checkInputValidity(formElement, inputElement, { ...rest }) {
-  if (!inputElement.validity.valid) {
-    showInputError(formElement, inputElement, rest);
-  } else {
-    hideInputError(formElement, inputElement, rest);
-  }
-};
-
-
-// Проверяем, есть ли невалидный инпут
-
-function hasInvalidInput(inputList) {
-  return inputList.some((inputElement) => {
-    return !inputElement.validity.valid;
-  });
-};
-
-// Переключаем кнопку сабмита
-
-function toggleButtonState(inputList, buttonElement, { inactiveButtonClass, ...rest }) {
-  if (hasInvalidInput(inputList)) {
-    buttonElement.classList.add(inactiveButtonClass);
-    buttonElement.setAttribute('disabled', '');
-  }
-  else {
-    buttonElement.classList.remove(inactiveButtonClass);
-    buttonElement.removeAttribute('disabled', '');
-  }
-}
-
-
-
-// Навешиваем слушатели на каждый инпут
-
-function setEventListeners(formElement, { inputSelector, submitButtonSelector, ...rest }) {
-  const inputList = Array.from(formElement.querySelectorAll(inputSelector));
-  const buttonElement = formElement.querySelector(submitButtonSelector);
-  toggleButtonState(inputList, buttonElement, rest);
-  inputList.forEach((inputElement) => {
-    inputElement.addEventListener('input', function () {
-      checkInputValidity(formElement, inputElement, rest);
-      toggleButtonState(inputList, buttonElement, rest);
-    });
-  });
-};
-
-//Финальная функция включения валидации
-
-function enableValidation({ formSelector, ...rest }) {
-  const formList = Array.from(document.querySelectorAll(formSelector));
-  formList.forEach((formElement) => {
-    setEventListeners(formElement, rest);
-  });
-};
-
-
-
-//Запускаем валидацию
-
-enableValidation({
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__button',
-  inactiveButtonClass: 'popup__button_disabled',
-  inputErrorClass: 'popup__input_type_error',
-  errorClass: 'popup__error_visible'
-});
-
-
-// Закрыть открытый попап клавишей Esc
-
-function handleEscape(evt) {
-  if (evt.key === 'Escape') {
-    const popupActive = document.querySelector('.popup_opened');
-    closePopup(popupActive);
-  };
-}
 
 
 // Показываем дефолтные карточки при открытии страницы

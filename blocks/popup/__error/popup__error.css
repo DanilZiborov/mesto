@@ -1,6 +1,4 @@
 .popup__error {
-  position: absolute;
-  top: calc(100% + 5px);
   min-height: 30px;
   font-size: 12px;
   line-height: 1.25;
