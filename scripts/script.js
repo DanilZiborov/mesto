@@ -78,10 +78,12 @@ const cardTemplate = document.querySelector('#card').content;
 
 function openPopup(popup) {
   popup.classList.add('popup_opened');
+  document.addEventListener('keyup', handleEscape);
 }
 
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
+  document.removeEventListener('keyup', handleEscape);
 }
 
 function hidePopup(evt) {
@@ -291,6 +293,15 @@ enableValidation({
   errorClass: 'popup__error_visible'
 });
 
+
+// Закрыть открытый попап клавишей Esc
+
+function handleEscape(evt) {
+  if (evt.key === 'Escape') {
+    const popupActive = document.querySelector('.popup_opened');
+    closePopup(popupActive);
+  };
+}
 
 
 // Показываем дефолтные карточки при открытии страницы
