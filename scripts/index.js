@@ -102,6 +102,9 @@ function handleEscape(evt) {
 //Очистить поля в попапе добавления карточки
 
 function clearPopupForm(evt) {
+  const submitButton = evt.currentTarget.querySelector('.popup__button');
+  submitButton.setAttribute('disabled', '');
+  submitButton.classList.add('popup__button_disabled');
   evt.currentTarget.reset();
 }
 
@@ -167,6 +170,7 @@ function addNewCard(evt) {
 
 function showImagePopup(title, image) {
   popupImage.src = image;
+  popupImage.alt = title;
   popupImageCaption.textContent = title;
   openPopup(popupTypeImage);
 }
