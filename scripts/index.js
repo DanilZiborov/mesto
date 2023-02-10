@@ -134,6 +134,8 @@ function showAddPopup() {
 
 //Создать карточку
 
+//Тут делаем класс (с Боожьей помощью)
+
 function getCard(title, image) {
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
   const cardTitle = cardElement.querySelector('.card__title');
