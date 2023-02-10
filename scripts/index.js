@@ -72,7 +72,7 @@ const cardsSection = document.querySelector('.cards');
 const cardTemplate = document.querySelector('#card').content;
 
 
-//Функции
+//ПОПАПЫ
 
 //Общие функции закрытия и открытия для попапов
 
@@ -132,29 +132,81 @@ function showAddPopup() {
   openPopup(popupTypeAdd);
 }
 
-//Создать карточку
 
-//Тут делаем класс (с Боожьей помощью)
+//КАРТОЧКИ
 
-function getCard(title, image) {
-  const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
-  const cardTitle = cardElement.querySelector('.card__title');
-  cardTitle.textContent = title;
-  const cardImage = cardElement.querySelector('.card__image');
-  cardImage.src = image;
-  cardImage.alt = title;
-  cardImage.addEventListener('click', () => showImagePopup(title, image));
-  const cardLikeButton = cardElement.querySelector('.card__like-button');
-  cardLikeButton.addEventListener('click', toggleLike);
-  const cardDeleteButton = cardElement.querySelector('.card__delete-button');
-  cardDeleteButton.addEventListener('click', deleteCard);
-  return cardElement;
+//Тут делаем класс (с Божьей помощью)
+
+class Card {
+  constructor(title, image, templateSelector) {
+    this._title = title;
+    this._image = image;
+    this._templateSelector = templateSelector;
+  }
+
+  _getTemplate() {
+    const cardElement = cardTemplate.querySelector(this._templateSelector).cloneNode(true);
+    return cardElement;
+  }
+
+  _showImagePopup() {
+    popupImage.src = this._image;
+    popupImage.alt = this._title;
+    popupImageCaption.textContent = this._title;
+    openPopup(popupTypeImage);
+  }
+
+  _toggleLike() {
+    this._likeButton.classList.toggle('card__like-button_active');
+  }
+
+  _deleteCard() {
+    this._element.remove();
+  };
+
+  _addEventListeners() {
+
+    //Создаю ещё два приватных свойства и очищаю обработчики лайка и удаления карточки от event
+    this._likeButton = this._element.querySelector('.card__like-button');
+    this._deleteButton = this._element.querySelector('.card__delete-button');
+
+    this._element
+      .querySelector('.card__image')
+      .addEventListener('click', () => {
+        this._showImagePopup()
+      });
+
+    this._likeButton
+      .addEventListener('click', () => {
+        this._toggleLike()
+      });
+
+    this._deleteButton
+      .addEventListener('click', () => {
+        this._deleteCard()
+      });
+  }
+
+
+  generateCard() {
+    this._element = this._getTemplate();
+    this._addEventListeners();
+
+    this._element.querySelector('.card__title').textContent = this._title;
+    this._element.querySelector('.card__image').src = this._image;
+    this._element.querySelector('.card__image').alt = this._title;
+
+
+    return this._element;
+  }
+
 }
 
+//Отрисовать карточку в DOM
 
-function createCard(title, image) {
-  const cardElement = getCard(title, image);
-  cardsSection.prepend(cardElement);
+function renderCard(title, image, templateSelector) {
+  const card = new Card(title, image, templateSelector).generateCard();
+  cardsSection.prepend(card);
 }
 
 
@@ -162,38 +214,17 @@ function createCard(title, image) {
 
 function addNewCard(evt) {
   evt.preventDefault();
-  createCard(placeTitleInput.value, placeLinkInput.value);
+  renderCard(placeTitleInput.value, placeLinkInput.value, '.card');
   clearPopupForm(evt);
   hidePopup(evt);
 };
 
 
-//Показать попап-картинку
-
-function showImagePopup(title, image) {
-  popupImage.src = image;
-  popupImage.alt = title;
-  popupImageCaption.textContent = title;
-  openPopup(popupTypeImage);
-}
-
-//Лайкнуть карточку
-
-function toggleLike(evt) {
-  evt.target.classList.toggle('card__like-button_active');
-}
-
-//Удалить карточку
-
-function deleteCard(evt) {
-  evt.target.closest('.card').remove();
-};
-
 //Показать карточки по умолчанию
 
 function showInitialCards() {
   initialCards.reverse().forEach(item => {
-    createCard(item.name, item.link);
+    renderCard(item.name, item.link, '.card');
   });
 };
 
@@ -219,3 +250,20 @@ popups.forEach(popup => {
 // Показываем дефолтные карточки при открытии страницы
 
 showInitialCards();
+
+//Зона теста объекта
+
+// const testCard = new Card('тайтл', 'https://avatars.mds.yandex.net/get-kinopoisk-image/1629390/865d2d0e-bac6-4a78-a0ed-17a87b285069/280x420' , '.card');
+
+// const cardTestFinal = testCard.generateCard();
+
+// cardsSection.prepend(cardTestFinal);
+
+// console.log(testCard._element);
+// console.log(testCard._title);
+// console.log(testCard._image);
+// console.log(testCard._templateSelector);
+// console.log(testCard._deleteButton);
+// console.log(testCard._likeButton);
+// console.log(testCard._likeButton);
+
