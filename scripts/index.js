@@ -35,6 +35,10 @@ const initialCards = [
 
 const popups = Array.from(document.querySelectorAll('.popup'));
 
+//Массив всех форм
+
+const forms = Array.from(document.forms);
+
 //Кнопки закрытия всех попапов
 
 const closeButtons = document.querySelectorAll('.popup__close-button');
@@ -66,7 +70,7 @@ const addButton = document.querySelector('.profile__add-button');
 const profileName = document.querySelector('.profile__name');
 const profileJob = document.querySelector('.profile__job');
 
-//Элементы карточек
+//Элементы шаблона карточки
 
 const cardsSection = document.querySelector('.cards');
 const cardTemplate = document.querySelector('#card').content;
@@ -247,23 +251,9 @@ popups.forEach(popup => {
 });
 
 
+
 // Показываем дефолтные карточки при открытии страницы
 
 showInitialCards();
 
-//Зона теста объекта
-
-// const testCard = new Card('тайтл', 'https://avatars.mds.yandex.net/get-kinopoisk-image/1629390/865d2d0e-bac6-4a78-a0ed-17a87b285069/280x420' , '.card');
-
-// const cardTestFinal = testCard.generateCard();
-
-// cardsSection.prepend(cardTestFinal);
-
-// console.log(testCard._element);
-// console.log(testCard._title);
-// console.log(testCard._image);
-// console.log(testCard._templateSelector);
-// console.log(testCard._deleteButton);
-// console.log(testCard._likeButton);
-// console.log(testCard._likeButton);
 
