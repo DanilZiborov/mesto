@@ -1,3 +1,20 @@
+//Импорты
+
+import Card from './card.js';
+import FormValidator from './validate.js';
+
+
+// Параметры валидации
+
+const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+}
+
 
 //Массив изначальных карточек
 
@@ -73,7 +90,6 @@ const profileJob = document.querySelector('.profile__job');
 //Элементы шаблона карточки
 
 const cardsSection = document.querySelector('.cards');
-const cardTemplate = document.querySelector('#card').content;
 
 
 //ПОПАПЫ
@@ -137,75 +153,8 @@ function showAddPopup() {
 }
 
 
-//КАРТОЧКИ
 
-//Тут делаем класс (с Божьей помощью)
-
-class Card {
-  constructor(title, image, templateSelector) {
-    this._title = title;
-    this._image = image;
-    this._templateSelector = templateSelector;
-  }
-
-  _getTemplate() {
-    const cardElement = cardTemplate.querySelector(this._templateSelector).cloneNode(true);
-    return cardElement;
-  }
-
-  _showImagePopup() {
-    popupImage.src = this._image;
-    popupImage.alt = this._title;
-    popupImageCaption.textContent = this._title;
-    openPopup(popupTypeImage);
-  }
-
-  _toggleLike() {
-    this._likeButton.classList.toggle('card__like-button_active');
-  }
-
-  _deleteCard() {
-    this._element.remove();
-  };
-
-  _addEventListeners() {
-
-    //Создаю ещё два приватных свойства и очищаю обработчики лайка и удаления карточки от event
-    this._likeButton = this._element.querySelector('.card__like-button');
-    this._deleteButton = this._element.querySelector('.card__delete-button');
-
-    this._element
-      .querySelector('.card__image')
-      .addEventListener('click', () => {
-        this._showImagePopup()
-      });
-
-    this._likeButton
-      .addEventListener('click', () => {
-        this._toggleLike()
-      });
-
-    this._deleteButton
-      .addEventListener('click', () => {
-        this._deleteCard()
-      });
-  }
-
-
-  generateCard() {
-    this._element = this._getTemplate();
-    this._addEventListeners();
-
-    this._element.querySelector('.card__title').textContent = this._title;
-    this._element.querySelector('.card__image').src = this._image;
-    this._element.querySelector('.card__image').alt = this._title;
-
-
-    return this._element;
-  }
-
-}
-
+// КАРТОЧКИ
 //Отрисовать карточку в DOM
 
 function renderCard(title, image, templateSelector) {
@@ -251,9 +200,17 @@ popups.forEach(popup => {
 });
 
 
-
 // Показываем дефолтные карточки при открытии страницы
 
 showInitialCards();
+
+// Включаем валидацию
+
+forms.forEach(form => {
+  new FormValidator(validationConfig, form).enableValidation();
+});
+
+const dick = new Card('f', 'f', '.card');
+dick.logGlobalconst();
 
 

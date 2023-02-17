@@ -1,17 +1,4 @@
-//ВАЛИДАЦИЯ
-
-const validationConfig = {
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__button',
-  inactiveButtonClass: 'popup__button_disabled',
-  inputErrorClass: 'popup__input_type_error',
-  errorClass: 'popup__error_visible'
-}
-
-//Делаем класс
-
-class FormValidator {
+export default class FormValidator {
   constructor(config, formElement) {
     this._config = config;
     this._formElement = formElement;
@@ -83,12 +70,5 @@ class FormValidator {
     this._setEventListeners();
   }
 }
-
-
-forms.forEach(form => {
-  const validationModeOn = new FormValidator(validationConfig, form);
-  validationModeOn.enableValidation();
-}); 
-
 
 
