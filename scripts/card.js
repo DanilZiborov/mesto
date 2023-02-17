@@ -1,3 +1,5 @@
+import {showImagePopup} from './index.js';
+
 export default class Card {
   constructor(title, image, templateSelector) {
     this._title = title;
@@ -11,12 +13,6 @@ export default class Card {
     return cardElement;
   }
 
-  _showImagePopup() {
-    popupImage.src = this._image;
-    popupImage.alt = this._title;
-    popupImageCaption.textContent = this._title;
-    openPopup(popupTypeImage);
-  }
 
   _toggleLike() {
     this._likeButton.classList.toggle('card__like-button_active');
@@ -28,14 +24,14 @@ export default class Card {
 
   _addEventListeners() {
 
-    //Создаю ещё два приватных свойства и очищаю обработчики лайка и удаления карточки от event
+    //Создаю ещё два приватных свойства и убираю event из обработчиков лайка и удаления карточки
     this._likeButton = this._element.querySelector('.card__like-button');
     this._deleteButton = this._element.querySelector('.card__delete-button');
 
     this._element
       .querySelector('.card__image')
-      .addEventListener('click', () => {
-        this._showImagePopup()
+      .addEventListener('click', (evt) => {
+        showImagePopup(evt)
       });
 
     this._likeButton
@@ -60,10 +56,6 @@ export default class Card {
 
 
     return this._element;
-  }
-
-  logGlobalconst() {
-    console.log(popups);
   }
 
 }

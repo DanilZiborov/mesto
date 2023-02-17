@@ -128,13 +128,21 @@ function clearPopupForm(evt) {
   evt.currentTarget.reset();
 }
 
-
 //Показать попап редактирования
 
 function showEditPopup() {
   nameInput.value = profileName.textContent;
   jobInput.value = profileJob.textContent;
   openPopup(popupTypeEdit);
+}
+
+//Показать попап-картинку
+
+export function showImagePopup(evt) {
+  popupImage.src = evt.target.src;
+  popupImage.alt = evt.target.parentElement.querySelector('.card__title').textContent;
+  popupImageCaption.textContent = evt.target.parentElement.querySelector('.card__title').textContent;
+  openPopup(popupTypeImage);
 }
 
 //Сохранить изменения из попапа редактирования
@@ -210,7 +218,5 @@ forms.forEach(form => {
   new FormValidator(validationConfig, form).enableValidation();
 });
 
-const dick = new Card('f', 'f', '.card');
-dick.logGlobalconst();
 
 
