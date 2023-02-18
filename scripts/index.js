@@ -56,8 +56,6 @@ const profileJob = document.querySelector('.profile__job');
 
 const cardsSection = document.querySelector('.cards');
 
-//ПОПАПЫ
-
 //Закрыть попап при сабмите формы
 
 function hidePopup(evt) {
@@ -96,7 +94,6 @@ function showAddPopup() {
   openPopup(popupTypeAdd);
 }
 
-// КАРТОЧКИ
 //Отрисовать карточку в DOM
 
 function renderCard(title, image, templateSelector) {
