@@ -23,7 +23,7 @@ export default class FormValidator {
   _hideInputError(inputElement) {
     const errorElement = this._formElement.querySelector(`.${inputElement.name}-error`);
     inputElement.classList.remove(this._config.inputErrorClass);
-    errorElement.classList.add(this._config.errorClass);
+    errorElement.classList.remove(this._config.errorClass);
     errorElement.textContent = '';
   }
 
@@ -35,7 +35,7 @@ export default class FormValidator {
 
   _toggleButtonState() {
     if (this._hasInvalidInput()) {
-      this._disableSubmitButton()
+      this.disableSubmitButton()
     }
     else {
       this._enableSubmitButton()
@@ -52,8 +52,8 @@ export default class FormValidator {
     })
   };
 
-
-  _disableSubmitButton() {
+  disableSubmitButton() {
+    this._buttonElement = this._formElement.querySelector(this._config.submitButtonSelector);
     this._buttonElement.classList.add(this._config.inactiveButtonClass);
     this._buttonElement.setAttribute('disabled', '');
   }
@@ -63,12 +63,16 @@ export default class FormValidator {
     this._buttonElement.removeAttribute('disabled', '');
   }
 
+  // Создаю публичный универсальный метод очистки ошибок валидации
+  clearErrorMessage() {
+    const allinputs = this._formElement.querySelectorAll('.popup__input');
+    allinputs.forEach(input => {
+      this._hideInputError(input);
+    });
+  }
 
   enableValidation() {
-    this._buttonElement = this._formElement.querySelector(this._config.submitButtonSelector);
-    this._disableSubmitButton();
+    this.disableSubmitButton();
     this._setEventListeners();
   }
 }
-
-

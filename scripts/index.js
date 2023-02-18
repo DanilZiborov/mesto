@@ -1,8 +1,10 @@
 //Импорты
 
-import Card from './card.js';
-import FormValidator from './validate.js';
+import Card from './Card.js';
+import FormValidator from './FormValidator.js';
 
+import { openPopup, closePopup } from './utils/utils.js';
+import {initialCards} from './constants.js';
 
 // Параметры валидации
 
@@ -14,37 +16,6 @@ const validationConfig = {
   inputErrorClass: 'popup__input_type_error',
   errorClass: 'popup__error_visible'
 }
-
-
-//Массив изначальных карточек
-
-const initialCards = [
-  {
-    name: 'Железноводск',
-    link: 'images/zhl.jpg'
-  },
-  {
-    name: 'Архыз',
-    link: 'images/arkh.jpg'
-  },
-  {
-    name: 'Бермамыт',
-    link: 'images/berm.jpg'
-  },
-  {
-    name: 'Лермонтов',
-    link: 'images/lerm.jpg'
-  },
-  {
-    name: 'Новотерский',
-    link: 'images/nvtr.jpg'
-  },
-  {
-    name: 'Пятигорск',
-    link: 'images/ptg.jpg'
-  },
-];
-
 
 //Глобальные переменные
 
@@ -74,12 +45,6 @@ const popupAddForm = document.forms.add;
 const placeTitleInput = popupTypeAdd.querySelector('.popup__input_type_title');
 const placeLinkInput = popupTypeAdd.querySelector('.popup__input_type_link');
 
-//Элементы попапа-картинки
-
-const popupTypeImage = document.querySelector('.popup_type_image');
-const popupImage = popupTypeImage.querySelector('.popup__image');
-const popupImageCaption = popupTypeImage.querySelector('.popup__image-caption');
-
 // Элементы профиля
 
 const editButton = document.querySelector('.profile__edit-button');
@@ -91,40 +56,18 @@ const profileJob = document.querySelector('.profile__job');
 
 const cardsSection = document.querySelector('.cards');
 
-
 //ПОПАПЫ
 
-//Общие функции закрытия и открытия для попапов
-
-function openPopup(popup) {
-  popup.classList.add('popup_opened');
-  document.addEventListener('keyup', handleEscape);
-}
-
-function closePopup(popup) {
-  popup.classList.remove('popup_opened');
-  document.removeEventListener('keyup', handleEscape);
-}
+//Закрыть попап при сабмите формы
 
 function hidePopup(evt) {
   closePopup(evt.currentTarget.closest('.popup'));
 }
 
-// Закрыть открытый попап клавишей Esc
-
-function handleEscape(evt) {
-  if (evt.key === 'Escape') {
-    const popupActive = document.querySelector('.popup_opened');
-    closePopup(popupActive);
-  };
-};
-
 //Очистить поля в попапе добавления карточки
 
 function clearPopupForm(evt) {
-  const submitButton = evt.currentTarget.querySelector('.popup__button');
-  submitButton.setAttribute('disabled', '');
-  submitButton.classList.add('popup__button_disabled');
+  new FormValidator(validationConfig, evt.currentTarget).disableSubmitButton();
   evt.currentTarget.reset();
 }
 
@@ -133,16 +76,8 @@ function clearPopupForm(evt) {
 function showEditPopup() {
   nameInput.value = profileName.textContent;
   jobInput.value = profileJob.textContent;
+  new FormValidator(validationConfig, popupEditForm).clearErrorMessage();
   openPopup(popupTypeEdit);
-}
-
-//Показать попап-картинку
-
-export function showImagePopup(evt) {
-  popupImage.src = evt.target.src;
-  popupImage.alt = evt.target.parentElement.querySelector('.card__title').textContent;
-  popupImageCaption.textContent = evt.target.parentElement.querySelector('.card__title').textContent;
-  openPopup(popupTypeImage);
 }
 
 //Сохранить изменения из попапа редактирования
@@ -157,10 +92,9 @@ function saveProfileChanges(evt) {
 //Показать попап добавления карточки
 
 function showAddPopup() {
+  new FormValidator(validationConfig, popupAddForm).clearErrorMessage();
   openPopup(popupTypeAdd);
 }
-
-
 
 // КАРТОЧКИ
 //Отрисовать карточку в DOM
@@ -170,7 +104,6 @@ function renderCard(title, image, templateSelector) {
   cardsSection.prepend(card);
 }
 
-
 //Показать карточку, добавленную через попап
 
 function addNewCard(evt) {
@@ -179,7 +112,6 @@ function addNewCard(evt) {
   clearPopupForm(evt);
   hidePopup(evt);
 };
-
 
 //Показать карточки по умолчанию
 
@@ -207,7 +139,6 @@ popups.forEach(popup => {
   });
 });
 
-
 // Показываем дефолтные карточки при открытии страницы
 
 showInitialCards();
@@ -217,6 +148,5 @@ showInitialCards();
 forms.forEach(form => {
   new FormValidator(validationConfig, form).enableValidation();
 });
-
 
 
