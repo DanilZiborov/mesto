@@ -1,6 +1,6 @@
 //Импорты
 
-import Card from './сard.js';
+import Card from './Card.js';
 import FormValidator from './FormValidator.js';
 
 import { openPopup, closePopup } from './utils/utils.js';
