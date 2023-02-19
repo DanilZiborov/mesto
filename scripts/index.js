@@ -4,7 +4,7 @@ import Card from './Card.js';
 import FormValidator from './FormValidator.js';
 
 import { openPopup, closePopup } from './utils/utils.js';
-import {initialCards} from './constants.js';
+import { initialCards } from './constants.js';
 
 // Параметры валидации
 
@@ -65,7 +65,6 @@ function hidePopup(evt) {
 //Очистить поля в попапе добавления карточки
 
 function clearPopupForm(evt) {
-  new FormValidator(validationConfig, evt.currentTarget).disableSubmitButton();
   evt.currentTarget.reset();
 }
 
@@ -74,7 +73,8 @@ function clearPopupForm(evt) {
 function showEditPopup() {
   nameInput.value = profileName.textContent;
   jobInput.value = profileJob.textContent;
-  new FormValidator(validationConfig, popupEditForm).clearErrorMessage();
+  editFormValidator.clearErrorMessage();
+  editFormValidator.disableSubmitButton();
   openPopup(popupTypeEdit);
 }
 
@@ -90,7 +90,8 @@ function saveProfileChanges(evt) {
 //Показать попап добавления карточки
 
 function showAddPopup() {
-  new FormValidator(validationConfig, popupAddForm).clearErrorMessage();
+  addFormValidator.clearErrorMessage();
+  addFormValidator.disableSubmitButton();
   openPopup(popupTypeAdd);
 }
 
@@ -142,8 +143,10 @@ showInitialCards();
 
 // Включаем валидацию
 
-forms.forEach(form => {
-  new FormValidator(validationConfig, form).enableValidation();
-});
+const editFormValidator = new FormValidator(validationConfig, popupEditForm);
+const addFormValidator = new FormValidator(validationConfig, popupAddForm);
+
+editFormValidator.enableValidation();
+addFormValidator.enableValidation();
 
 
