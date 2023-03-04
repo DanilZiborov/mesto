@@ -1,10 +1,9 @@
-import { showImagePopup } from './utils/utils.js';
-
 export default class Card {
-  constructor(title, image, templateSelector) {
+  constructor(title, image, templateSelector, handleCardClick) {
     this._title = title;
     this._image = image;
     this._templateSelector = templateSelector;
+    this._handleCardClick = handleCardClick;
   }
 
   _getTemplate() {
@@ -28,7 +27,7 @@ export default class Card {
 
     this._cardImage
       .addEventListener('click', (evt) => {
-        showImagePopup(evt)
+        this._handleCardClick(evt);
       });
 
     this._likeButton

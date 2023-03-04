@@ -6,6 +6,9 @@ import FormValidator from './FormValidator.js';
 import { openPopup, closePopup } from './utils/utils.js';
 import { initialCards } from './constants.js';
 
+import PopupWithImage from './PopupWithImage.js';
+import Section from './Section.js';
+
 // Параметры валидации
 
 const validationConfig = {
@@ -97,10 +100,12 @@ function showAddPopup() {
 
 //Отрисовать карточку в DOM
 
-function renderCard(title, image, templateSelector) {
-  const card = new Card(title, image, templateSelector).generateCard();
-  cardsSection.prepend(card);
-}
+// function renderCard(title, image, templateSelector) {
+//   const card = new Card(title, image, templateSelector, (evt) => {
+//     testImagePopup.open(evt);
+//   }).generateCard(); //переписать по-нормальному с деструктуризацией
+//   cardsSection.prepend(card);
+// }
 
 //Показать карточку, добавленную через попап
 
@@ -111,13 +116,6 @@ function addNewCard(evt) {
   hidePopup(evt);
 };
 
-//Показать карточки по умолчанию
-
-function showInitialCards() {
-  initialCards.reverse().forEach(item => {
-    renderCard(item.name, item.link, '.card');
-  });
-};
 
 // Слушатели событий
 
@@ -137,9 +135,24 @@ popups.forEach(popup => {
   });
 });
 
-// Показываем дефолтные карточки при открытии страницы
 
-showInitialCards();
+//Делаем загрузку дефолтных карточек через секцию
+
+const initialCardsSection = new Section({items: initialCards, renderer: (item) => {
+  const card = new Card(item.name, item.link, '.card', (evt) => {
+    testImagePopup.open(evt);
+  });
+  const newCard = card.generateCard();
+
+  initialCardsSection.addItem(newCard);
+}}, '.cards')
+
+
+
+//показываем дефолтные карточки
+
+initialCardsSection.renderItems();
+
 
 // Включаем валидацию
 
@@ -148,5 +161,12 @@ const addFormValidator = new FormValidator(validationConfig, popupAddForm);
 
 editFormValidator.enableValidation();
 addFormValidator.enableValidation();
+
+//зона теста классов попапов
+
+const testImagePopup = new PopupWithImage('.popup_type_image');
+
+testImagePopup.setEventListeners();
+
 
 
