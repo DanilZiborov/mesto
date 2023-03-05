@@ -8,6 +8,7 @@ import { initialCards } from './constants.js';
 
 import PopupWithImage from './PopupWithImage.js';
 import Section from './Section.js';
+import PopupWithForm from './PopupWithForm.js';
 
 // Параметры валидации
 
@@ -57,19 +58,19 @@ const profileJob = document.querySelector('.profile__job');
 
 //Элементы шаблона карточки
 
-const cardsSection = document.querySelector('.cards');
+// const cardsSection = document.querySelector('.cards');
 
 //Закрыть попап при сабмите формы
 
-function hidePopup(evt) {
-  closePopup(evt.currentTarget.closest('.popup'));
-}
+// function hidePopup(evt) {
+//   closePopup(evt.currentTarget.closest('.popup'));
+// }
 
 //Очистить поля в попапе добавления карточки
 
-function clearPopupForm(evt) {
-  evt.currentTarget.reset();
-}
+// function clearPopupForm(evt) {
+//   evt.currentTarget.reset();
+// }
 
 //Показать попап редактирования
 
@@ -92,11 +93,11 @@ function saveProfileChanges(evt) {
 
 //Показать попап добавления карточки
 
-function showAddPopup() {
-  addFormValidator.clearErrorMessage();
-  addFormValidator.disableSubmitButton();
-  openPopup(popupTypeAdd);
-}
+// function showAddPopup() {
+//   addFormValidator.clearErrorMessage();
+//   addFormValidator.disableSubmitButton();
+//   openPopup(popupTypeAdd);
+// }
 
 //Отрисовать карточку в DOM
 
@@ -107,45 +108,29 @@ function showAddPopup() {
 //   cardsSection.prepend(card);
 // }
 
-//Показать карточку, добавленную через попап
+// //Показать карточку, добавленную через попап
 
-function addNewCard(evt) {
-  evt.preventDefault();
-  renderCard(placeTitleInput.value, placeLinkInput.value, '.card');
-  clearPopupForm(evt);
-  hidePopup(evt);
-};
+// function addNewCard(evt) {
+//   evt.preventDefault();
+//   renderCard(placeTitleInput.value, placeLinkInput.value, '.card');
+//   clearPopupForm(evt);
+//   hidePopup(evt);
+// };
 
 
-// Слушатели событий
 
-editButton.addEventListener('click', showEditPopup);
-addButton.addEventListener('click', showAddPopup);
-popupEditForm.addEventListener('submit', saveProfileChanges);
-popupAddForm.addEventListener('submit', addNewCard);
-closeButtons.forEach((button) => {
-  const popup = button.closest('.popup');
-  button.addEventListener('click', () => closePopup(popup));
-});
-popups.forEach(popup => {
-  popup.addEventListener('click', evt => {
-    if (evt.target === evt.currentTarget) {
-      closePopup(popup);
-    };
-  });
-});
 
 
 //Делаем загрузку дефолтных карточек через секцию
 
 const initialCardsSection = new Section({items: initialCards, renderer: (item) => {
-  const card = new Card(item.name, item.link, '.card', (evt) => {
+  const card = new Card(item.name, item.link, '.card', (evt) => { // переписать приём аргументов через деструктуризацию, как в классе Section, чтоб было понятнее
     testImagePopup.open(evt);
   });
   const newCard = card.generateCard();
 
   initialCardsSection.addItem(newCard);
-}}, '.cards')
+}}, '.cards');
 
 
 
@@ -167,6 +152,39 @@ addFormValidator.enableValidation();
 const testImagePopup = new PopupWithImage('.popup_type_image');
 
 testImagePopup.setEventListeners();
+
+// это просто пиздец, нужна общая функция рендерера карточки для section
+
+const testAddPopup = new PopupWithForm('.popup_type_add', () => {
+  const addByPopupCard = new Section ({items: testAddPopup.formValues, renderer: (item) => {
+    const card = new Card(item.title, item.link, '.card', (evt) => {
+      testImagePopup.open(evt);
+    });
+    const newCard = card.generateCard();
+    addByPopupCard.addItem(newCard);
+  }}, '.cards');
+  addByPopupCard.renderItems();
+  testAddPopup.close(); 
+});
+
+testAddPopup.setEventListeners();
+
+
+
+
+
+
+
+
+//глобальные слышатели событий
+
+// Слушатели событий
+
+// editButton.addEventListener('click', );
+addButton.addEventListener('click', () => {
+  testAddPopup.open();
+});
+popupEditForm.addEventListener('submit', saveProfileChanges);
 
 
 

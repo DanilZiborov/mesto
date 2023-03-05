@@ -1,6 +1,8 @@
 export default class Popup {
   constructor(selector) {
     this._selector = selector;
+    // тут хорошо бы зарефакторить, чтобы сразу записывался this._popup, а не просто селектор.
+    //тогда не надо будет записывать popup в ветоде v ev listeners
   }
 
   open() {
@@ -10,7 +12,7 @@ export default class Popup {
 
   close() {
     this._popup.classList.remove('popup_opened');
-    document.addEventListener('keyup', this._handleEscClose);
+    document.removeEventListener('keyup', this._handleEscClose);
   }
 
   _handleEscClose(evt) {
