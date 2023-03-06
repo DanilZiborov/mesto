@@ -26,3 +26,24 @@ export const initialCards = [
     link: 'images/ptg.jpg'
   },
 ];
+
+// параметры валидации
+
+export const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+}
+
+//элементы профиля
+
+export const profileName = document.querySelector('.profile__name');
+export const profileJob = document.querySelector('.profile__job');
+
+//формы
+
+export const popupEditForm = document.forms.edit;
+export const popupAddForm = document.forms.add;

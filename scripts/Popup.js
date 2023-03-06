@@ -1,5 +1,5 @@
 export default class Popup {
-  constructor(selector) {
+  constructor({selector}) {
     this._selector = selector;
     // тут хорошо бы зарефакторить, чтобы сразу записывался this._popup, а не просто селектор.
     //тогда не надо будет записывать popup в ветоде v ev listeners

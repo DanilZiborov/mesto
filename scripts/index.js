@@ -3,58 +3,43 @@
 import Card from './Card.js';
 import FormValidator from './FormValidator.js';
 
-import { openPopup, closePopup } from './utils/utils.js';
 import { initialCards } from './constants.js';
 
 import PopupWithImage from './PopupWithImage.js';
 import Section from './Section.js';
 import PopupWithForm from './PopupWithForm.js';
 
-// Параметры валидации
+import { popupAddForm } from './constants.js';
+import { popupEditForm } from './constants.js';
 
-const validationConfig = {
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__button',
-  inactiveButtonClass: 'popup__button_disabled',
-  inputErrorClass: 'popup__input_type_error',
-  errorClass: 'popup__error_visible'
-}
+import { validationConfig } from './constants.js';
+import UserInfo from './UserInfo.js';
+
+
+
+
 
 //Глобальные переменные
 
 //Массив всех попапов
 
-const popups = Array.from(document.querySelectorAll('.popup'));
+// const popups = Array.from(document.querySelectorAll('.popup'));
 
 //Массив всех форм
 
-const forms = Array.from(document.forms);
+// const forms = Array.from(document.forms);
 
 //Кнопки закрытия всех попапов
 
-const closeButtons = document.querySelectorAll('.popup__close-button');
+// const closeButtons = document.querySelectorAll('.popup__close-button');
 
 //Элементы попапа редкатирования личных данных
 
-const popupTypeEdit = document.querySelector('.popup_type_edit');
-const popupEditForm = document.forms.edit;
-const nameInput = popupTypeEdit.querySelector('.popup__input_type_name');
-const jobInput = popupTypeEdit.querySelector('.popup__input_type_job');
-
-//Элементы попапа добавления карточки
-
-const popupTypeAdd = document.querySelector('.popup_type_add');
-const popupAddForm = document.forms.add;
-const placeTitleInput = popupTypeAdd.querySelector('.popup__input_type_title');
-const placeLinkInput = popupTypeAdd.querySelector('.popup__input_type_link');
 
 // Элементы профиля
 
 const editButton = document.querySelector('.profile__edit-button');
 const addButton = document.querySelector('.profile__add-button');
-const profileName = document.querySelector('.profile__name');
-const profileJob = document.querySelector('.profile__job');
 
 //Элементы шаблона карточки
 
@@ -74,22 +59,22 @@ const profileJob = document.querySelector('.profile__job');
 
 //Показать попап редактирования
 
-function showEditPopup() {
-  nameInput.value = profileName.textContent;
-  jobInput.value = profileJob.textContent;
-  editFormValidator.clearErrorMessage();
-  editFormValidator.disableSubmitButton();
-  openPopup(popupTypeEdit);
-}
+// function showEditPopup() {
+//   nameInput.value = profileName.textContent;
+//   jobInput.value = profileJob.textContent;
+//   editFormValidator.clearErrorMessage();
+//   editFormValidator.disableSubmitButton();
+//   openPopup(popupTypeEdit);
+// }
 
 //Сохранить изменения из попапа редактирования
 
-function saveProfileChanges(evt) {
-  evt.preventDefault();
-  profileName.textContent = nameInput.value;
-  profileJob.textContent = jobInput.value;
-  hidePopup(evt);
-}
+// function saveProfileChanges(evt) {
+//   evt.preventDefault();
+//   profileName.textContent = nameInput.value;
+//   profileJob.textContent = jobInput.value;
+//   hidePopup(evt);
+// }
 
 //Показать попап добавления карточки
 
@@ -124,9 +109,9 @@ function saveProfileChanges(evt) {
 //Делаем загрузку дефолтных карточек через секцию
 
 const initialCardsSection = new Section({items: initialCards, renderer: (item) => {
-  const card = new Card(item.name, item.link, '.card', (evt) => { // переписать приём аргументов через деструктуризацию, как в классе Section, чтоб было понятнее
+  const card = new Card({title: item.name, image: item.link, templateSelector: '.card', handleCardClick: (evt) => { // переписать приём аргументов через деструктуризацию, как в классе Section, чтоб было понятнее
     testImagePopup.open(evt);
-  });
+  }});
   const newCard = card.generateCard();
 
   initialCardsSection.addItem(newCard);
@@ -149,42 +134,84 @@ addFormValidator.enableValidation();
 
 //зона теста классов попапов
 
-const testImagePopup = new PopupWithImage('.popup_type_image');
 
-testImagePopup.setEventListeners();
+//данные пользователя
+
+const userInfo = new UserInfo({nameselector: '.profile__name', jobselector: '.profile__job'});
+
+
+//попап-картинка
+
+const testImagePopup = new PopupWithImage({selector: '.popup_type_image'});
+
+
+
+//попап-добавление
 
 // это просто пиздец, нужна общая функция рендерера карточки для section
 
-const testAddPopup = new PopupWithForm('.popup_type_add', () => {
+const testAddPopup = new PopupWithForm({selector: '.popup_type_add', submitHandler: () => {
   const addByPopupCard = new Section ({items: testAddPopup.formValues, renderer: (item) => {
-    const card = new Card(item.title, item.link, '.card', (evt) => {
+    const card = new Card({title: item.title, image: item.link, templateSelector: '.card', handleCardClick: (evt) => {
       testImagePopup.open(evt);
-    });
+    }});
     const newCard = card.generateCard();
     addByPopupCard.addItem(newCard);
   }}, '.cards');
   addByPopupCard.renderItems();
-  testAddPopup.close(); 
-});
+  testAddPopup.close();
+}});
+
+
+
+// попап-изменение
+
+const testEditPopup = new PopupWithForm({selector: '.popup_type_edit', submitHandler: () => {
+  userInfo.setUserInfo(testEditPopup.formValues);
+  testEditPopup.close();
+}})
+
+
+
+
+
+// навешиваем слушатели на классы
 
 testAddPopup.setEventListeners();
-
-
-
-
-
-
+testImagePopup.setEventListeners();
+testEditPopup.setEventListeners();
 
 
 //глобальные слышатели событий
 
-// Слушатели событий
 
-// editButton.addEventListener('click', );
 addButton.addEventListener('click', () => {
   testAddPopup.open();
 });
-popupEditForm.addEventListener('submit', saveProfileChanges);
+
+// перебираем список инпутов у попапа редактирования (этот список у нас уже есть, просто сделал метод публичным)
+// через switch/case присваиваем значения из метода getUserInfo инпутам
+// это единственное решение без глобальных переменных, до которого я дошёл
+// скорее всего, есть другое, более элегантное
+
+editButton.addEventListener('click', () => {
+  const info = userInfo.getUserInfo();
+  testEditPopup.inputList.forEach(input => {
+    switch(input.name) {
+      case 'name':
+        input.value = info.name;
+        break;
+      case 'job':
+        input.value = info.job;
+    }
+  })
+  testEditPopup.open();
+});
+
+// подгружаем данные пользователя
+
+userInfo.setUserInfo({name: 'Жак-Ив Кусто', job: 'Исследователь океана'});
+
 
 
 
