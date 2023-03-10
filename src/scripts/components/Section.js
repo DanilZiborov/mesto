@@ -6,7 +6,10 @@ export default class Section {
     this._container = document.querySelector(selector);
   }
 
-  renderItems() { // если на входе у нас массив, как при создании начальных карточек, то используем перебор
+  renderItems() {
+    // если вход метод принимает массив(для отрисовки начальных карточек), то используем перебор
+    // если объект, то просто отправляем его в рендерер
+
     if (Array.isArray(this._renderedItems)) {
       this._renderedItems.forEach(item => this._renderer(item));
     }
