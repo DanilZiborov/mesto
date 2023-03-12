@@ -56,8 +56,3 @@ export const addButton = document.querySelector('.profile__add-button');
 
 export const popupEditForm = document.forms.edit;
 export const popupAddForm = document.forms.add;
-
-// инпуты попапа изменения данных
-
-export const nameInput = popupEditForm.elements.name;
-export const jobInput = popupEditForm.elements.job;

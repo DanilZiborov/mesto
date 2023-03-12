@@ -2,40 +2,40 @@
 
 import '../pages/index.css'; // стили для вебпака
 
-import Card from './components/Card.js';
-import PopupWithImage from './components/PopupWithImage.js';
-import PopupWithForm from './components/PopupWithForm.js';
-import FormValidator from './components/FormValidator.js';
-import Section from './components/Section.js';
-import UserInfo from './components/UserInfo.js';
+import Card from '../scripts/components/Card.js';
+import PopupWithImage from '../scripts/components/PopupWithImage.js';
+import PopupWithForm from '../scripts/components/PopupWithForm.js';
+import FormValidator from '../scripts/components/FormValidator.js';
+import Section from '../scripts/components/Section.js';
+import UserInfo from '../scripts/components/UserInfo.js';
 
-import { initialCards } from './utils/constants.js';
-import { validationConfig } from './utils/constants.js';
+import { initialCards } from '../scripts/utils/constants.js';
+import { validationConfig } from '../scripts/utils/constants.js';
 
-import { popupAddForm } from './utils/constants.js';
-import { popupEditForm } from './utils/constants.js';
+import { popupAddForm } from '../scripts/utils/constants.js';
+import { popupEditForm } from '../scripts/utils/constants.js';
 
-import { nameInput } from './utils/constants.js';
-import { jobInput } from './utils/constants.js';
+import { editButton } from '../scripts/utils/constants.js';
+import { addButton } from '../scripts/utils/constants.js';
 
-import { editButton } from './utils/constants.js';
-import { addButton } from './utils/constants.js';
+
+// функция создания карточки
+
+function createCard(item) {
+  const card = new Card({
+    title: item.title, image: item.link, templateSelector: '.card', handleCardClick: (title, link) => {
+      imagePopup.open(title, link);
+    }
+  });
+  const newCard = card.generateCard();
+  return newCard;
+}
 
 // экземпляры классов
+// секция карточек
 
-// дефолтные карточки
-
-const initialCardsSection = new Section({
-  items: initialCards, renderer: (item) => {
-    const card = new Card({
-      title: item.title, image: item.link, templateSelector: '.card', handleCardClick: (evt) => {
-        imagePopup.open(evt);
-      }
-    });
-    const newCard = card.generateCard();
-
-    initialCardsSection.addItem(newCard);
-  }
+const cardsSection = new Section({
+  items: initialCards, renderer: createCard
 }, '.cards');
 
 // данные пользователя
@@ -50,18 +50,7 @@ const imagePopup = new PopupWithImage({ selector: '.popup_type_image' });
 
 const addPopup = new PopupWithForm({
   selector: '.popup_type_add', submitHandler: () => {
-    const addByPopupCard = new Section({
-      items: addPopup.formValues, renderer: (item) => {
-        const card = new Card({
-          title: item.title, image: item.link, templateSelector: '.card', handleCardClick: (evt) => {
-            imagePopup.open(evt);
-          }
-        });
-        const newCard = card.generateCard();
-        addByPopupCard.addItem(newCard);
-      }
-    }, '.cards');
-    addByPopupCard.renderItems();
+    cardsSection.renderCard(addPopup.formValues);
     addPopup.close();
   }
 });
@@ -91,8 +80,7 @@ addButton.addEventListener('click', () => {
 
 editButton.addEventListener('click', () => {
   const info = userInfo.getUserInfo();
-  nameInput.value = info.name;
-  jobInput.value = info.job;
+  editPopup.setInputValues(info);
   editFormValidator.clearErrorMessage();
   editFormValidator.disableSubmitButton();
   editPopup.open();
@@ -104,7 +92,7 @@ userInfo.setUserInfo({ name: 'Жак-Ив Кусто', job: 'Исследова�
 
 // показываем дефолтные карточки
 
-initialCardsSection.renderItems();
+cardsSection.renderInitialCards();
 
 // включаем валидацию
 

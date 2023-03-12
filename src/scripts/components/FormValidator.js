@@ -2,6 +2,7 @@ export default class FormValidator {
   constructor(config, formElement) {
     this._config = config;
     this._formElement = formElement;
+    this._buttonElement = this._formElement.querySelector(this._config.submitButtonSelector);
   }
 
   _checkInputValidity(inputElement) {
@@ -53,7 +54,6 @@ export default class FormValidator {
   };
 
   disableSubmitButton() {
-    this._buttonElement = this._formElement.querySelector(this._config.submitButtonSelector);
     this._buttonElement.classList.add(this._config.inactiveButtonClass);
     this._buttonElement.setAttribute('disabled', '');
   }
@@ -65,8 +65,7 @@ export default class FormValidator {
 
   // Создаю публичный универсальный метод очистки ошибок валидации
   clearErrorMessage() {
-    const allinputs = this._formElement.querySelectorAll('.popup__input');
-    allinputs.forEach(input => {
+    this._inputsList.forEach(input => {
       this._hideInputError(input);
     });
   }

@@ -6,20 +6,15 @@ export default class Section {
     this._container = document.querySelector(selector);
   }
 
-  renderItems() {
-    // если вход метод принимает массив(для отрисовки начальных карточек), то используем перебор
-    // если объект, то просто отправляем его в рендерер
-
-    if (Array.isArray(this._renderedItems)) {
-      this._renderedItems.forEach(item => this._renderer(item));
-    }
-    else {
-      this._renderer(this._renderedItems);
-    }
+  renderInitialCards() {
+    this._renderedItems.forEach(item => {
+      this.renderCard(item);
+    });
   }
 
-  addItem(element) {
-    this._container.prepend(element);
+  renderCard(item) {
+    const card = this._renderer(item);
+    this._container.prepend(card);
   }
 
 }
