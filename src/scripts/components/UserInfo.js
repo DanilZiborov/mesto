@@ -1,20 +1,25 @@
 export default class UserInfo {
-  constructor({nameselector, jobselector}) {
+  constructor({nameselector, aboutselector, avatarSelector}) {
     this._nameElement = document.querySelector(nameselector);
-    this._jobElement = document.querySelector(jobselector);
+    this._aboutElement = document.querySelector(aboutselector);
+    this._avatarElement = document.querySelector(avatarSelector);
   }
 
   getUserInfo() {
     this.userData = {};
     this.userData.name = this._nameElement.textContent;
-    this.userData.job = this._jobElement.textContent;
+    this.userData.about = this._aboutElement.textContent;
 
     return this.userData;
 
   }
 
-  setUserInfo({name, job}) {
+  setUserInfo({name, about, avatar, currentUserId}) {
     this._nameElement.textContent = name;
-    this._jobElement.textContent = job;
+    this._aboutElement.textContent = about;
+    this._avatarElement.src = avatar;
+
+    // публичное свойство с айдишником
+    this.currentUserId = currentUserId;
   }
 }
