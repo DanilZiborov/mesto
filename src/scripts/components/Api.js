@@ -1,27 +1,27 @@
 export default class Api {
-  constructor({baseUrl, headers}) {
+  constructor({ baseUrl, headers }) {
     this._baseUrl = baseUrl;
     this._headers = headers;
   }
 
   _getJson(res) {
-    if(res.ok)  {
+    if (res.ok) {
       return res.json();
     }
     return Promise.reject(`Ошибка: ${res.status}`);
   }
 
   getInitialCards() {
-    return fetch(`${this._baseUrl}/cards`, {headers: this._headers})
+    return fetch(`${this._baseUrl}/cards`, { headers: this._headers })
       .then(this._getJson);
   }
 
   getUserInfo() {
-    return fetch(`${this._baseUrl}/users/me`, {headers: this._headers})
-    .then(this._getJson);
+    return fetch(`${this._baseUrl}/users/me`, { headers: this._headers })
+      .then(this._getJson);
   }
 
-  editUserInfo({name, about}) {
+  editUserInfo({ name, about }) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: 'PATCH',
       headers: this._headers,
@@ -33,7 +33,7 @@ export default class Api {
       .then(this._getJson);
   }
 
-  addNewCard({name, link}) {
+  addNewCard({ name, link }) {
     return fetch(`${this._baseUrl}/cards`, {
       method: 'POST',
       headers: this._headers,
@@ -45,8 +45,8 @@ export default class Api {
       .then(this._getJson);
   }
 
-  deleteCard(card) {
-    return fetch(`${this._baseUrl}/cards/${card.id}`, {
+  deleteCard(cardId) {
+    return fetch(`${this._baseUrl}/cards/${cardId}`, {
       method: 'DELETE',
       headers: this._headers
     })
@@ -65,6 +65,17 @@ export default class Api {
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: 'DELETE',
       headers: this._headers
+    })
+      .then(this._getJson);
+  }
+
+  changeAvatar({ avatar }) {
+    return fetch(`${this._baseUrl}/users/me/avatar`, {
+      method: 'PATCH',
+      headers: this._headers,
+      body: JSON.stringify({
+        avatar: avatar
+      })
     })
       .then(this._getJson);
   }

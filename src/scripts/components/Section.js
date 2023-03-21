@@ -13,7 +13,7 @@ export default class Section {
 
   renderCard(item, currentUserId) {
     const card = this._renderer(item, currentUserId);
-    this._container.prepend(card);
+    this._container.append(card);
   }
 
 }

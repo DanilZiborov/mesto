@@ -1,5 +1,5 @@
 export default class Card {
-  constructor({data, templateSelector, handleCardClick, handleDeleteIconClick, handleLikeClick}) {
+  constructor({ data, templateSelector, handleCardClick, handleDeleteIconClick, handleLikeClick }) {
     this._name = data.name;
     this._link = data.link;
     this._likes = data.likes;
@@ -47,7 +47,7 @@ export default class Card {
     this._likeButton
       .addEventListener('click', () => {
         // в качестве аргументов передаю в обработчик лайка элемент счётчика лайков, айди текущей карточки и состояние лайка
-        this._handleLikeClick({likeCounter: this._likeCounter, cardId: this._id, isLiked: this._isLiked});
+        this._handleLikeClick({ likeCounter: this._likeCounter, cardId: this._id, isLiked: this._isLiked });
       });
 
     this._deleteButton
@@ -76,9 +76,7 @@ export default class Card {
     if (this._currentUserId !== this._owner._id) {
       this._deleteButton.classList.add('card__delete-button_hidden');
     }
-    //  debugger
 
     return this._element;
   }
-
 }

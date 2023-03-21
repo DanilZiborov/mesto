@@ -33,5 +33,4 @@ export default class Popup {
         }
       })
   }
-
 }

@@ -1,41 +1,3 @@
-// импорты картинок для вебпака
-
-import zhlImage from '../../images/zhl.jpg';
-import arkhImage from '../../images/arkh.jpg';
-import bermImage from '../../images/berm.jpg';
-import lermImage from '../../images/lerm.jpg';
-import nvtrImage from '../../images/nvtr.jpg';
-import ptgImage from '../../images/ptg.jpg';
-
-//Массив изначальных карточек
-
-export const initialCards = [
-  {
-    title: 'Железноводск',
-    link: zhlImage
-  },
-  {
-    title: 'Архыз',
-    link: arkhImage
-  },
-  {
-    title: 'Бермамыт',
-    link: bermImage
-  },
-  {
-    title: 'Лермонтов',
-    link: lermImage
-  },
-  {
-    title: 'Новотерский',
-    link: nvtrImage
-  },
-  {
-    title: 'Пятигорск',
-    link: ptgImage
-  },
-];
-
 // параметры валидации
 
 export const validationConfig = {
@@ -51,8 +13,10 @@ export const validationConfig = {
 
 export const editButton = document.querySelector('.profile__edit-button');
 export const addButton = document.querySelector('.profile__add-button');
+export const avatarChangeButton = document.querySelector('.profile__avatar-change-button');
 
 // формы
 
 export const popupEditForm = document.forms.edit;
 export const popupAddForm = document.forms.add;
+export const popupAvatarChangeForm = document.forms.avatar;

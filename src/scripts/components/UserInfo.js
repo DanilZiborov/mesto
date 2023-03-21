@@ -1,5 +1,5 @@
 export default class UserInfo {
-  constructor({nameselector, aboutselector, avatarSelector}) {
+  constructor({ nameselector, aboutselector, avatarSelector }) {
     this._nameElement = document.querySelector(nameselector);
     this._aboutElement = document.querySelector(aboutselector);
     this._avatarElement = document.querySelector(avatarSelector);
@@ -11,13 +11,27 @@ export default class UserInfo {
     this.userData.about = this._aboutElement.textContent;
 
     return this.userData;
-
   }
 
-  setUserInfo({name, about, avatar, currentUserId}) {
+// отдельные методы для установки аватара и информации о пользователе,
+// чтоб не перезаписывать те поля, которые не изменились
+
+// все данные, которые нужны для изменний в DOM, приходят от сервера, а не напрямую из полей формы
+
+  setUserAvatar({ avatar }) {
+    this._avatarElement.src = avatar;
+  }
+
+  setUserInfo({ name, about }) {
     this._nameElement.textContent = name;
     this._aboutElement.textContent = about;
-    this._avatarElement.src = avatar;
+  }
+
+// метод получения всей инфы профиля и айди текущего пользователя
+
+  getAllUserData({ name, about, avatar, currentUserId }) {
+    this.setUserInfo({name, about})
+    this.setUserAvatar({avatar});
 
     // публичное свойство с айдишником
     this.currentUserId = currentUserId;

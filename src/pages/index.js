@@ -1,6 +1,10 @@
 // Импорты
 
-import '../pages/index.css'; // стили для вебпака
+// стили для вебпака
+
+import '../pages/index.css';
+
+// классы
 
 import Card from '../scripts/components/Card.js';
 import PopupWithImage from '../scripts/components/PopupWithImage.js';
@@ -9,21 +13,23 @@ import PopupWithSubmit from '../scripts/components/PopupWithSubmit.js';
 import FormValidator from '../scripts/components/FormValidator.js';
 import Section from '../scripts/components/Section.js';
 import UserInfo from '../scripts/components/UserInfo.js';
-
 import Api from '../scripts/components/Api.js';
+
+// конфиг валидации
 
 import { validationConfig } from '../scripts/utils/constants.js';
 
+// формы попапов
+
 import { popupAddForm } from '../scripts/utils/constants.js';
 import { popupEditForm } from '../scripts/utils/constants.js';
+import { popupAvatarChangeForm } from '../scripts/utils/constants.js';
+
+// элементы профиля
 
 import { editButton } from '../scripts/utils/constants.js';
 import { addButton } from '../scripts/utils/constants.js';
-
-
-// глобальная переменная с id текущего пользователя
-
-
+import { avatarChangeButton } from '../scripts/utils/constants.js';
 
 // функция создания карточки
 
@@ -52,18 +58,16 @@ function createCard(item, currentUserId) {
     // обработчик лайка принимает счётчик лайков, id текущей карточки и состояние лайка из класса
 
     handleLikeClick: ({likeCounter, cardId, isLiked}) => {
-      console.log(isLiked);
-      console.log(cardId);
+
       if(isLiked) {
         api.deleteLike(cardId)
           .then(res => {
             likeCounter.textContent = res.likes.length;
             card.toggleLike();
-            console.log('убрал лайк');
           })
-          .catch(err => console.log(err));
-
+          .catch(err => console.log(`Невозможно лайкнуть карточку, ${err}`));
       }
+
       else {
         api.putLike(cardId)
         .then(res => {
@@ -71,17 +75,17 @@ function createCard(item, currentUserId) {
           card.toggleLike();
           console.log('поставил лайк');
         })
-        .catch(err => console.log(err));
+        .catch(err => console.log(`Невозможно лайкнуть карточку, ${err}`));
       }
     }
-
-  });
+  })
 
   const newCard = card.generateCard();
   return newCard
 }
 
-// экземпляры классов
+// инициализация классов
+
 // секция карточек
 
 const cardsSection = new Section({
@@ -100,29 +104,35 @@ const imagePopup = new PopupWithImage({ selector: '.popup_type_image' });
 
 const addPopup = new PopupWithForm({
   selector: '.popup_type_add', submitHandler: () => {
+    addPopup.toggleLoader();
     api.addNewCard(addPopup.formValues)
     .then(res => {
       cardsSection.renderCard({name: res.name, link: res.link, likes: res.likes, _id: res._id, owner: res.owner}, userInfo.currentUserId);
-      console.log(res._id);
+      addPopup.toggleLoader();
+      addPopup.close();
     })
     .catch(err => {
+      addPopup.toggleLoader();
       console.log(`Не удалось добавить новую карточку, ${err}`);
     });
-
-    addPopup.close();
   }
 });
 
-// попап-изменение данных полльзвателя
+// попап-изменение данных пользователя
 
 const editPopup = new PopupWithForm({
   selector: '.popup_type_edit', submitHandler: () => {
+    editPopup.toggleLoader();
     api.editUserInfo(editPopup.formValues)
+    .then(res => {
+      userInfo.setUserInfo({name: res.name, about: res.about});
+      editPopup.toggleLoader();
+      editPopup.close();
+    })
     .catch(err => {
       console.log(`Не удалось отредактировать данные полььзователя, ${err}`);
+      editPopup.toggleLoader();
     });
-    userInfo.setUserInfo(editPopup.formValues);
-    editPopup.close();
   }
 })
 
@@ -130,14 +140,34 @@ const editPopup = new PopupWithForm({
 
 const deletePopup = new PopupWithSubmit({
   selector: '.popup_type_delete', submitHandler: (card) => {
-    console.log(card);
-    api.deleteCard(card)
+    api.deleteCard(card.id)
+    .then(() => {
+      card.remove();
+    })
     .catch(err => {
       console.log(`Не удалось удалить карточку, ${err}`);
     });
-    card.remove();
 
     deletePopup.close();
+  }
+})
+
+// попап-изменение аватара
+
+const avatarChangePopup = new PopupWithForm({
+  selector: '.popup_type_avatar-change', submitHandler: () => {
+    avatarChangePopup.toggleLoader();
+    api.changeAvatar(avatarChangePopup.formValues)
+    .then(res => {
+      userInfo.setUserAvatar({avatar: res.avatar});
+      avatarChangePopup.toggleLoader();
+      avatarChangePopup.close();
+    })
+
+    .catch(err => {
+      console.error(`Не удалось загрузить новый аватар ${err}`);
+      avatarChangePopup.toggleLoader();
+    })
   }
 })
 
@@ -158,6 +188,7 @@ addPopup.setEventListeners();
 imagePopup.setEventListeners();
 editPopup.setEventListeners();
 deletePopup.setEventListeners();
+avatarChangePopup.setEventListeners();
 
 // добавляем слушатели на кнопки профиля
 
@@ -175,23 +206,31 @@ editButton.addEventListener('click', () => {
   editPopup.open();
 });
 
+avatarChangeButton.addEventListener('click', () => {
+  avatarChangeFormValidator.clearErrorMessage();
+  avatarChangeFormValidator.disableSubmitButton();
+  avatarChangePopup.open();
+})
+
 // включаем валидацию
 
 const editFormValidator = new FormValidator(validationConfig, popupEditForm);
 const addFormValidator = new FormValidator(validationConfig, popupAddForm);
+const avatarChangeFormValidator = new FormValidator(validationConfig, popupAvatarChangeForm);
 
 editFormValidator.enableValidation();
 addFormValidator.enableValidation();
+avatarChangeFormValidator.enableValidation();
 
 // подгружаем с сервера карточки и данные польлзователя
 
-
 Promise.all([api.getUserInfo(), api.getInitialCards() ])
   .then(([user, items]) => {
-    userInfo.setUserInfo({ name: user.name, about: user.about, avatar: user.avatar, currentUserId: user._id });
+    userInfo.getAllUserData({ name: user.name, about: user.about, avatar: user.avatar, currentUserId: user._id });
     cardsSection.renderInitialCards(items, userInfo.currentUserId);
   })
   .catch(err => {
-    console.log(`Проблема c загрузкой начальных карточек или информации профиля, ${err}`);
+    console.error(`Проблема c загрузкой начальных карточек или информации профиля, ${err}`);
   });
 
+  
