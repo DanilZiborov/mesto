@@ -18,8 +18,8 @@ export default class Card {
   }
 
   _getTemplate() {
-    const cardTemplate = document.querySelector('#card').content;
-    const cardElement = cardTemplate.querySelector(this._templateSelector).cloneNode(true);
+    const cardTemplate = document.querySelector(this._templateSelector).content;
+    const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
     return cardElement;
   }
 
@@ -27,30 +27,31 @@ export default class Card {
     this._isLiked = this._likes.some(item => item._id === this._currentUserId);
   }
 
-  toggleLike() {
+  updateLikeState(likes) {
+    this._likeCounter.textContent = likes;
     this._isLiked = !this._isLiked;
-    this._likeButton.classList.toggle('card__like-button_active');
+    this._buttonLike.classList.toggle('card__like-button_active');
   }
 
   _addEventListeners() {
     this._cardTitle = this._element.querySelector('.card__title');
     this._cardImage = this._element.querySelector('.card__image');
-    this._likeButton = this._element.querySelector('.card__like-button');
+    this._buttonLike = this._element.querySelector('.card__like-button');
     this._likeCounter = this._element.querySelector('.card__like-counter');
-    this._deleteButton = this._element.querySelector('.card__delete-button');
+    this._buttonDelete = this._element.querySelector('.card__delete-button');
 
     this._cardImage
       .addEventListener('click', () => {
         this._handleCardClick(this._name, this._link);
       });
 
-    this._likeButton
+    this._buttonLike
       .addEventListener('click', () => {
         // в качестве аргументов передаю в обработчик лайка элемент счётчика лайков, айди текущей карточки и состояние лайка
-        this._handleLikeClick({ likeCounter: this._likeCounter, cardId: this._id, isLiked: this._isLiked });
+        this._handleLikeClick({ cardId: this._id, isLiked: this._isLiked });
       });
 
-    this._deleteButton
+    this._buttonDelete
       .addEventListener('click', () => {
         this._handleDeleteIconClick(this._element);
       });
@@ -70,11 +71,11 @@ export default class Card {
     this._checkLike();
 
     if (this._isLiked) {
-      this._likeButton.classList.add('card__like-button_active');
+      this._buttonLike.classList.add('card__like-button_active');
     }
 
     if (this._currentUserId !== this._owner._id) {
-      this._deleteButton.classList.add('card__delete-button_hidden');
+      this._buttonDelete.classList.add('card__delete-button_hidden');
     }
 
     return this._element;

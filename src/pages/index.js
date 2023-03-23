@@ -44,26 +44,25 @@ function createCard(item, currentUserId) {
       currentUserId: currentUserId
     },
 
-    templateSelector: '.card',
+    templateSelector: '#card',
 
     handleCardClick: (name, link) => {
       imagePopup.open(name, link);
     },
 
     handleDeleteIconClick: (card) => {
-      deletePopup.getCard(card);
+      deletePopup.setCard(card);
       deletePopup.open();
     },
 
-    // обработчик лайка принимает счётчик лайков, id текущей карточки и состояние лайка из класса
+    // id текущей карточки и состояние лайка из класса
 
-    handleLikeClick: ({likeCounter, cardId, isLiked}) => {
+    handleLikeClick: ({cardId, isLiked}) => {
 
       if(isLiked) {
         api.deleteLike(cardId)
           .then(res => {
-            likeCounter.textContent = res.likes.length;
-            card.toggleLike();
+            card.updateLikeState(res.likes.length);
           })
           .catch(err => console.log(`Невозможно лайкнуть карточку, ${err}`));
       }
@@ -71,9 +70,7 @@ function createCard(item, currentUserId) {
       else {
         api.putLike(cardId)
         .then(res => {
-          likeCounter.textContent = res.likes.length;
-          card.toggleLike();
-          console.log('поставил лайк');
+          card.updateLikeState(res.likes.length);
         })
         .catch(err => console.log(`Невозможно лайкнуть карточку, ${err}`));
       }
@@ -233,4 +230,3 @@ Promise.all([api.getUserInfo(), api.getInitialCards() ])
     console.error(`Проблема c загрузкой начальных карточек или информации профиля, ${err}`);
   });
 
-  

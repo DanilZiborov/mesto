@@ -6,7 +6,7 @@ export default class PopupWithSubmit extends Popup {
     this._submitHandler = submitHandler;
   }
 
-  getCard(card) {
+  setCard(card) {
     this._card = card;
   }
 
