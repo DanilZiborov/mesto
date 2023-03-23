@@ -1,11 +1,12 @@
 export default class Card {
-  constructor({ data, templateSelector, handleCardClick, handleDeleteIconClick, handleLikeClick }) {
+  constructor({ data, currentUserId, templateSelector, handleCardClick, handleDeleteIconClick, handleLikeClick }) {
     this._name = data.name;
     this._link = data.link;
     this._likes = data.likes;
     this._id = data.id;
     this._owner = data.owner;
-    this._currentUserId = data.currentUserId;
+
+    this._currentUserId = currentUserId;
 
     this._templateSelector = templateSelector;
 
@@ -28,7 +29,7 @@ export default class Card {
   }
 
   updateLikeState(likes) {
-    this._likeCounter.textContent = likes;
+    this._likesCounter.textContent = likes;
     this._isLiked = !this._isLiked;
     this._buttonLike.classList.toggle('card__like-button_active');
   }
@@ -37,7 +38,7 @@ export default class Card {
     this._cardTitle = this._element.querySelector('.card__title');
     this._cardImage = this._element.querySelector('.card__image');
     this._buttonLike = this._element.querySelector('.card__like-button');
-    this._likeCounter = this._element.querySelector('.card__like-counter');
+    this._likesCounter = this._element.querySelector('.card__like-counter');
     this._buttonDelete = this._element.querySelector('.card__delete-button');
 
     this._cardImage
@@ -66,7 +67,7 @@ export default class Card {
     this._cardImage.src = this._link;
     this._cardImage.alt = this._name;
     this._cardTitle.textContent = this._name;
-    this._likeCounter.textContent = this._likes.length;
+    this._likesCounter.textContent = this._likes.length;
 
     this._checkLike();
 

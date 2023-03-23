@@ -27,13 +27,13 @@ import { popupAvatarChangeForm } from '../scripts/utils/constants.js';
 
 // элементы профиля
 
-import { editButton } from '../scripts/utils/constants.js';
-import { addButton } from '../scripts/utils/constants.js';
+import { buttonEdit } from '../scripts/utils/constants.js';
+import { buttonAdd } from '../scripts/utils/constants.js';
 import { avatarChangeButton } from '../scripts/utils/constants.js';
 
 // функция создания карточки
 
-function createCard(item, currentUserId) {
+function createCard(item) {
   const card = new Card({
     data: {
       name: item.name,
@@ -41,18 +41,19 @@ function createCard(item, currentUserId) {
       likes: item.likes,
       id: item._id,
       owner: item.owner,
-      currentUserId: currentUserId
     },
+
+    currentUserId: userInfo.currentUserId,
 
     templateSelector: '#card',
 
     handleCardClick: (name, link) => {
-      imagePopup.open(name, link);
+      popupTypeImage.open(name, link);
     },
 
     handleDeleteIconClick: (card) => {
-      deletePopup.setCard(card);
-      deletePopup.open();
+      popupTypeDelete.setCard(card);
+      popupTypeDelete.open();
     },
 
     // id текущей карточки и состояние лайка из класса
@@ -86,30 +87,33 @@ function createCard(item, currentUserId) {
 // секция карточек
 
 const cardsSection = new Section({
-  renderer: createCard
+  renderer: (data) => {
+    cardsSection.addItem(createCard(data))
+  }
 }, '.cards');
 
 // данные пользователя
 
-const userInfo = new UserInfo({ nameselector: '.profile__name', aboutselector: '.profile__about', avatarSelector: '.profile__avatar' });
+const userInfo = new UserInfo({ nameSelector: '.profile__name', aboutSelector: '.profile__about', avatarSelector: '.profile__avatar' });
 
 // попап-картинка
 
-const imagePopup = new PopupWithImage({ selector: '.popup_type_image' });
+const popupTypeImage = new PopupWithImage({ selector: '.popup_type_image' });
 
 // попап-добавление
 
-const addPopup = new PopupWithForm({
+const popupTypeAdd = new PopupWithForm({
   selector: '.popup_type_add', submitHandler: () => {
-    addPopup.toggleLoader();
-    api.addNewCard(addPopup.formValues)
+    popupTypeAdd.toggleLoader();
+    api.addNewCard(popupTypeAdd.formValues)
     .then(res => {
-      cardsSection.renderCard({name: res.name, link: res.link, likes: res.likes, _id: res._id, owner: res.owner}, userInfo.currentUserId);
-      addPopup.toggleLoader();
-      addPopup.close();
+      const card = createCard({name: res.name, link: res.link, likes: res.likes, _id: res._id, owner: res.owner});
+      cardsSection.addItem(card);
+      popupTypeAdd.toggleLoader();
+      popupTypeAdd.close();
     })
     .catch(err => {
-      addPopup.toggleLoader();
+      popupTypeAdd.toggleLoader();
       console.log(`Не удалось добавить новую карточку, ${err}`);
     });
   }
@@ -117,53 +121,52 @@ const addPopup = new PopupWithForm({
 
 // попап-изменение данных пользователя
 
-const editPopup = new PopupWithForm({
+const popupTypeEdit = new PopupWithForm({
   selector: '.popup_type_edit', submitHandler: () => {
-    editPopup.toggleLoader();
-    api.editUserInfo(editPopup.formValues)
+    popupTypeEdit.toggleLoader();
+    api.editUserInfo(popupTypeEdit.formValues)
     .then(res => {
       userInfo.setUserInfo({name: res.name, about: res.about});
-      editPopup.toggleLoader();
-      editPopup.close();
+      popupTypeEdit.toggleLoader();
+      popupTypeEdit.close();
     })
     .catch(err => {
       console.log(`Не удалось отредактировать данные полььзователя, ${err}`);
-      editPopup.toggleLoader();
+      popupTypeEdit.toggleLoader();
     });
   }
 })
 
 // попап-подтверждение-удаления карточки
 
-const deletePopup = new PopupWithSubmit({
+const popupTypeDelete = new PopupWithSubmit({
   selector: '.popup_type_delete', submitHandler: (card) => {
     api.deleteCard(card.id)
     .then(() => {
       card.remove();
+      popupTypeDelete.close();
     })
     .catch(err => {
       console.log(`Не удалось удалить карточку, ${err}`);
     });
-
-    deletePopup.close();
   }
 })
 
 // попап-изменение аватара
 
-const avatarChangePopup = new PopupWithForm({
+const popupTypeAvatar = new PopupWithForm({
   selector: '.popup_type_avatar-change', submitHandler: () => {
-    avatarChangePopup.toggleLoader();
-    api.changeAvatar(avatarChangePopup.formValues)
+    popupTypeAvatar.toggleLoader();
+    api.changeAvatar(popupTypeAvatar.formValues)
     .then(res => {
       userInfo.setUserAvatar({avatar: res.avatar});
-      avatarChangePopup.toggleLoader();
-      avatarChangePopup.close();
+      popupTypeAvatar.toggleLoader();
+      popupTypeAvatar.close();
     })
 
     .catch(err => {
       console.error(`Не удалось загрузить новый аватар ${err}`);
-      avatarChangePopup.toggleLoader();
+      popupTypeAvatar.toggleLoader();
     })
   }
 })
@@ -179,52 +182,53 @@ const api = new Api({
   }
 });
 
+// Валидация
+
+const formEditValidator = new FormValidator(validationConfig, popupEditForm);
+const formAddValidator = new FormValidator(validationConfig, popupAddForm);
+const avatarChangeFormValidator = new FormValidator(validationConfig, popupAvatarChangeForm);
+
 // добавляем слушатели на экземпляры классов
 
-addPopup.setEventListeners();
-imagePopup.setEventListeners();
-editPopup.setEventListeners();
-deletePopup.setEventListeners();
-avatarChangePopup.setEventListeners();
+popupTypeAdd.setEventListeners();
+popupTypeImage.setEventListeners();
+popupTypeEdit.setEventListeners();
+popupTypeDelete.setEventListeners();
+popupTypeAvatar.setEventListeners();
 
 // добавляем слушатели на кнопки профиля
 
-addButton.addEventListener('click', () => {
-  addFormValidator.clearErrorMessage();
-  addFormValidator.disableSubmitButton();
-  addPopup.open();
+buttonAdd.addEventListener('click', () => {
+  formAddValidator.clearErrorMessage();
+  formAddValidator.disableSubmitButton();
+  popupTypeAdd.open();
 });
 
-editButton.addEventListener('click', () => {
+buttonEdit.addEventListener('click', () => {
   const info = userInfo.getUserInfo();
-  editPopup.setInputValues(info);
-  editFormValidator.clearErrorMessage();
-  editFormValidator.disableSubmitButton();
-  editPopup.open();
+  popupTypeEdit.setInputValues(info);
+  formEditValidator.clearErrorMessage();
+  popupTypeEdit.open();
 });
 
 avatarChangeButton.addEventListener('click', () => {
   avatarChangeFormValidator.clearErrorMessage();
-  avatarChangeFormValidator.disableSubmitButton();
-  avatarChangePopup.open();
+  popupTypeAvatar.setInputValues({avatar: userInfo.getUserInfo().avatar});
+  popupTypeAvatar.open();
 })
 
 // включаем валидацию
 
-const editFormValidator = new FormValidator(validationConfig, popupEditForm);
-const addFormValidator = new FormValidator(validationConfig, popupAddForm);
-const avatarChangeFormValidator = new FormValidator(validationConfig, popupAvatarChangeForm);
-
-editFormValidator.enableValidation();
-addFormValidator.enableValidation();
+formEditValidator.enableValidation();
+formAddValidator.enableValidation();
 avatarChangeFormValidator.enableValidation();
 
 // подгружаем с сервера карточки и данные польлзователя
 
 Promise.all([api.getUserInfo(), api.getInitialCards() ])
   .then(([user, items]) => {
-    userInfo.getAllUserData({ name: user.name, about: user.about, avatar: user.avatar, currentUserId: user._id });
-    cardsSection.renderInitialCards(items, userInfo.currentUserId);
+    userInfo.setAllUserData({ name: user.name, about: user.about, avatar: user.avatar, currentUserId: user._id });
+    cardsSection.renderItems(items);
   })
   .catch(err => {
     console.error(`Проблема c загрузкой начальных карточек или информации профиля, ${err}`);

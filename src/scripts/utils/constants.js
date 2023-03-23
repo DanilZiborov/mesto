@@ -11,8 +11,8 @@ export const validationConfig = {
 
 // элементы профиля
 
-export const editButton = document.querySelector('.profile__edit-button');
-export const addButton = document.querySelector('.profile__add-button');
+export const buttonEdit = document.querySelector('.profile__edit-button');
+export const buttonAdd = document.querySelector('.profile__add-button');
 export const avatarChangeButton = document.querySelector('.profile__avatar-change-button');
 
 // формы

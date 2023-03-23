@@ -1,7 +1,7 @@
 export default class UserInfo {
-  constructor({ nameselector, aboutselector, avatarSelector }) {
-    this._nameElement = document.querySelector(nameselector);
-    this._aboutElement = document.querySelector(aboutselector);
+  constructor({ nameSelector, aboutSelector, avatarSelector }) {
+    this._nameElement = document.querySelector(nameSelector);
+    this._aboutElement = document.querySelector(aboutSelector);
     this._avatarElement = document.querySelector(avatarSelector);
   }
 
@@ -9,6 +9,7 @@ export default class UserInfo {
     this.userData = {};
     this.userData.name = this._nameElement.textContent;
     this.userData.about = this._aboutElement.textContent;
+    this.userData.avatar = this._avatarElement.src;
 
     return this.userData;
   }
@@ -29,7 +30,7 @@ export default class UserInfo {
 
 // метод получения всей инфы профиля и айди текущего пользователя
 
-  getAllUserData({ name, about, avatar, currentUserId }) {
+  setAllUserData({ name, about, avatar, currentUserId }) {
     this.setUserInfo({name, about})
     this.setUserAvatar({avatar});
 
