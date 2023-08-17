@@ -23,6 +23,7 @@
 - **JavaScript ES6**: классовые элементы, наследование элементов,
 - **CSS3**: flexbox, grid, адаптивная вёвстка mobile-first, медиазапросы,
 - **HTML5**: семантические теги, template,
+- **БЭМ Nested**,
 - **Webpack**,
 - **npm-пакеты**: Babel, cssnano, etc.,
 
